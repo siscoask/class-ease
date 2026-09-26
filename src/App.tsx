@@ -24,6 +24,7 @@ import { VenueModal } from './components/VenueModal';
 import { PersonalEventModal } from './components/PersonalEventModal';
 import { ShareTimetableModal } from './components/ShareTimetableModal';
 import { FeedbackModal } from './components/FeedbackModal';
+import { PrintableTimetable } from './components/PrintableTimetable';
 
 import { HomePage } from './pages/HomePage';
 import { TimetablePage } from './pages/TimetablePage';
@@ -225,17 +226,18 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors">
-      {/* Header */}
-      <Header
-        currentTab={currentTab}
-        onSelectTab={handleSelectTab}
-        darkMode={profile.darkMode}
-        onToggleDarkMode={toggleDarkMode}
-      />
+    <>
+      <div id="screen-root" className="print:hidden min-h-screen bg-stone-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors">
+        {/* Header */}
+        <Header
+          currentTab={currentTab}
+          onSelectTab={handleSelectTab}
+          darkMode={profile.darkMode}
+          onToggleDarkMode={toggleDarkMode}
+        />
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 pt-5 pb-20 md:pb-10">
+        {/* Main Container */}
+        <main className="flex-1 max-w-6xl w-full mx-auto px-3.5 sm:px-6 pt-4 sm:pt-6 pb-24 md:pb-12">
         {currentTab === 'home' && (
           <HomePage
             userProfile={profile}
@@ -396,5 +398,9 @@ export default function App() {
         />
       )}
     </div>
+
+    {/* Official Certified University Printable Timetable (Printed on Print / PDF export) */}
+    <PrintableTimetable sessions={activeSessions} profile={profile} />
+  </>
   );
 }

@@ -19,8 +19,15 @@ export const TimetableWeekly: React.FC<TimetableWeeklyProps> = ({
   const campus = getCampusNow();
 
   return (
-    <div className="overflow-x-auto pb-4 scrollbar-thin">
-      <div className="min-w-[880px] grid grid-cols-5 gap-3">
+    <div className="space-y-2">
+      {/* Mobile Swipe Hint */}
+      <div className="flex md:hidden items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 px-1 font-mono">
+        <span>Weekly Calendar Grid</span>
+        <span>Swipe horizontally (Mon–Fri) →</span>
+      </div>
+
+      <div className="overflow-x-auto pb-4 scrollbar-thin rounded-2xl">
+        <div className="min-w-[860px] grid grid-cols-5 gap-3">
         {ACADEMIC_DAYS.map((day) => {
           const isToday = campus.day === day;
           const daySessions = sessions
@@ -143,6 +150,7 @@ export const TimetableWeekly: React.FC<TimetableWeeklyProps> = ({
             </div>
           );
         })}
+        </div>
       </div>
     </div>
   );

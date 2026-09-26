@@ -10,7 +10,8 @@ import { TimetableWeekly } from '../components/TimetableWeekly';
 import { TimetableDaily } from '../components/TimetableDaily';
 import { TimetableAgenda } from '../components/TimetableAgenda';
 import { TimetableCompact } from '../components/TimetableCompact';
-import { Search, Filter, Calendar, LayoutGrid, List, Table } from 'lucide-react';
+import { Search, Filter, Calendar, LayoutGrid, List, Table, Printer } from 'lucide-react';
+import { OFFICIAL_METADATA } from '../data/timetable';
 
 interface TimetablePageProps {
   sessions: TimetableSession[];
@@ -92,58 +93,69 @@ export const TimetablePage: React.FC<TimetablePageProps> = ({
             Academic Timetable
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Official FUNAAB Lecture Schedule • Version 2.0 TIMTEC
+            Official FUNAAB Lecture Schedule • Certified TIMTEC v{OFFICIAL_METADATA.timetableVersion}
           </p>
         </div>
 
-        {/* View Switcher Segmented Control */}
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs self-start sm:self-auto">
-          <button
-            onClick={() => handleViewChange('daily')}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-semibold transition-all ${
-              viewMode === 'daily'
-                ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <Calendar className="w-3.5 h-3.5" />
-            <span>Daily</span>
-          </button>
+        {/* View Switcher Segmented Control & Print Action */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs overflow-x-auto scrollbar-thin">
+            <button
+              onClick={() => handleViewChange('daily')}
+              className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold transition-all shrink-0 ${
+                viewMode === 'daily'
+                  ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>Daily</span>
+            </button>
+
+            <button
+              onClick={() => handleViewChange('weekly')}
+              className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold transition-all shrink-0 ${
+                viewMode === 'weekly'
+                  ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span>Weekly</span>
+            </button>
+
+            <button
+              onClick={() => handleViewChange('agenda')}
+              className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold transition-all shrink-0 ${
+                viewMode === 'agenda'
+                  ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <List className="w-3.5 h-3.5" />
+              <span>Agenda</span>
+            </button>
+
+            <button
+              onClick={() => handleViewChange('compact')}
+              className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg font-semibold transition-all shrink-0 ${
+                viewMode === 'compact'
+                  ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <Table className="w-3.5 h-3.5" />
+              <span>Compact</span>
+            </button>
+          </div>
 
           <button
-            onClick={() => handleViewChange('weekly')}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-semibold transition-all ${
-              viewMode === 'weekly'
-                ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
+            onClick={() => window.print()}
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition-colors shadow-2xs shrink-0"
+            title="Print certified A4 academic timetable document"
           >
-            <LayoutGrid className="w-3.5 h-3.5" />
-            <span>Weekly</span>
-          </button>
-
-          <button
-            onClick={() => handleViewChange('agenda')}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-semibold transition-all ${
-              viewMode === 'agenda'
-                ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <List className="w-3.5 h-3.5" />
-            <span>Agenda</span>
-          </button>
-
-          <button
-            onClick={() => handleViewChange('compact')}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg font-semibold transition-all ${
-              viewMode === 'compact'
-                ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <Table className="w-3.5 h-3.5" />
-            <span>Compact</span>
+            <Printer className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+            <span>Print A4</span>
           </button>
         </div>
       </div>
