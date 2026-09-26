@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { UserProfile, TimetableViewMode } from '../types';
-import { VERIFIED_COLLEGES } from '../data/timetable';
+import React, { useState, useEffect } from 'react';
+import { UserProfile, TimetableViewMode, TimetableDay } from '../types';
+import { VERIFIED_COLLEGES, TIMETABLE_SESSIONS, VERIFIED_COURSE_TITLES } from '../data/timetable';
+import { getDepartmentSuggestedCourses, ACADEMIC_DAYS } from '../utils/scheduleLogic';
 import { BrandLogo } from './BrandLogo';
-import { ArrowRight, Check, Sparkles } from 'lucide-react';
+import { ArrowRight, Check, Sparkles, BookOpen, Plus, X, Calendar } from 'lucide-react';
 
 interface OnboardingModalProps {
   initialProfile: UserProfile;
@@ -18,22 +19,69 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   const [collegeId, setCollegeId] = useState(initialProfile.collegeId || VERIFIED_COLLEGES[0]?.id || '');
   const [departmentId, setDepartmentId] = useState(initialProfile.departmentId || '');
   const [level, setLevel] = useState(initialProfile.level || '100');
+  const [selectedCourses, setSelectedCourses] = useState<string[]>(initialProfile.selectedCourseCodes || []);
+  const [practicalDay, setPracticalDay] = useState<TimetableDay>('Tuesday');
+  const [extraCourseInput, setExtraCourseInput] = useState('');
   const [view, setView] = useState<TimetableViewMode>(initialProfile.preferredView || 'daily');
 
   const selectedCollege = VERIFIED_COLLEGES.find((c) => c.id === collegeId) || VERIFIED_COLLEGES[0];
   const departments = selectedCollege ? selectedCollege.departments : [];
+  const currentDeptCode = departmentId || (departments[0]?.code ?? 'CSC');
+
+  // When reaching Course selection step, pre-populate if empty
+  useEffect(() => {
+    if (selectedCourses.length === 0 && currentDeptCode) {
+      const suggested = getDepartmentSuggestedCourses(currentDeptCode, level, TIMETABLE_SESSIONS);
+      if (suggested.length > 0) {
+        setSelectedCourses(suggested);
+      }
+    }
+  }, [currentDeptCode, level]);
+
+  const toggleCourse = (code: string) => {
+    if (selectedCourses.includes(code)) {
+      setSelectedCourses(selectedCourses.filter((c) => c !== code));
+    } else {
+      setSelectedCourses([...selectedCourses, code]);
+    }
+  };
+
+  const handleAddExtraCourse = (e: React.FormEvent) => {
+    e.preventDefault();
+    const clean = extraCourseInput.trim().toUpperCase();
+    if (!clean) return;
+    if (!selectedCourses.includes(clean)) {
+      setSelectedCourses([...selectedCourses, clean]);
+    }
+    setExtraCourseInput('');
+  };
 
   const handleNext = () => {
-    if (step < 5) {
+    if (step < 6) {
+      if (step === 4 && selectedCourses.length === 0) {
+        // Auto-seed courses for Step 5
+        const suggested = getDepartmentSuggestedCourses(currentDeptCode, level, TIMETABLE_SESSIONS);
+        setSelectedCourses(suggested);
+      }
       setStep(step + 1);
     } else {
       // Complete
+      const practicalMap: Record<string, TimetableDay> = {};
+      if (level === '100') {
+        practicalMap['PHS 191'] = practicalDay;
+        practicalMap['CHM 191'] = practicalDay;
+        practicalMap['BIO 107'] = practicalDay;
+        practicalMap['PCP 191'] = practicalDay;
+      }
+
       onComplete({
         ...initialProfile,
         preferredName: name.trim(),
         collegeId: selectedCollege?.id || '',
-        departmentId: departmentId || departments[0]?.code || '',
+        departmentId: currentDeptCode,
         level,
+        selectedCourseCodes: selectedCourses,
+        practicalDayPreferences: practicalMap,
         preferredView: view,
         onboardingCompleted: true,
       });
@@ -54,7 +102,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
     {
       id: 'weekly',
       title: 'Weekly View',
-      desc: 'Monday to Friday birds-eye view of your entire academic week.',
+      desc: 'Monday to Friday bird’s-eye view of your entire academic week.',
     },
     {
       id: 'agenda',
@@ -69,13 +117,13 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-3 sm:p-4 animate-in fade-in duration-200">
+      <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]">
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 border-b border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
+        <div className="px-5 pt-5 pb-3.5 border-b border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
           <BrandLogo size="sm" showTagline={false} />
           <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500 font-mono">
-            <span>Step {step} of 5</span>
+            <span>Step {step} of 6</span>
           </div>
         </div>
 
@@ -83,12 +131,12 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
         <div className="w-full bg-slate-100 dark:bg-slate-800 h-1">
           <div
             className="bg-indigo-600 h-1 transition-all duration-300"
-            style={{ width: `${(step / 5) * 100}%` }}
+            style={{ width: `${(step / 6) * 100}%` }}
           />
         </div>
 
         {/* Body Content */}
-        <div className="p-6 overflow-y-auto flex-1">
+        <div className="p-5 sm:p-6 overflow-y-auto flex-1 scrollbar-thin">
           {/* STEP 1: Name */}
           {step === 1 && (
             <div className="space-y-4">
@@ -100,7 +148,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                   What should we call you?
                 </h2>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  Optional. We use this to greet you calmly and personalize your daily timetable.
+                  Optional. We use this to greet you calmly and personalize your timetable.
                 </p>
               </div>
 
@@ -123,7 +171,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
               </div>
 
               <p className="text-[11px] text-slate-400 dark:text-slate-500">
-                Stored entirely on your device. No email, phone, or university login required.
+                Stored entirely on your device. Zero login friction—no email or password.
               </p>
             </div>
           )}
@@ -139,11 +187,11 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                   Select your College
                 </h2>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  Only verified colleges from the official FUNAAB TIMTEC timetable are listed.
+                  Includes COLCOMPS and all faculties verified for First Semester 2026/2027.
                 </p>
               </div>
 
-              <div className="space-y-2 pt-1 max-h-64 overflow-y-auto pr-1">
+              <div className="space-y-2 pt-1 max-h-64 overflow-y-auto pr-1 scrollbar-thin">
                 {VERIFIED_COLLEGES.map((col) => {
                   const isSelected = col.id === collegeId;
                   return (
@@ -192,37 +240,31 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 </p>
               </div>
 
-              <div className="space-y-2 pt-1 max-h-64 overflow-y-auto pr-1">
-                {departments.length > 0 ? (
-                  departments.map((dept) => {
-                    const isSelected = (departmentId || departments[0].code) === dept.code;
-                    return (
-                      <button
-                        key={dept.id}
-                        onClick={() => setDepartmentId(dept.code)}
-                        className={`w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between ${
-                          isSelected
-                            ? 'border-indigo-600 bg-indigo-50/70 dark:bg-indigo-950/40 text-indigo-950 dark:text-white shadow-xs'
-                            : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-700 dark:text-slate-300'
-                        }`}
-                      >
-                        <div>
-                          <div className="text-xs font-bold font-mono text-indigo-600 dark:text-indigo-400">
-                            {dept.code}
-                          </div>
-                          <div className="text-xs font-medium">{dept.name}</div>
+              <div className="space-y-2 pt-1 max-h-64 overflow-y-auto pr-1 scrollbar-thin">
+                {departments.map((dept) => {
+                  const isSelected = (departmentId || departments[0]?.code) === dept.code;
+                  return (
+                    <button
+                      key={dept.id}
+                      onClick={() => setDepartmentId(dept.code)}
+                      className={`w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between ${
+                        isSelected
+                          ? 'border-indigo-600 bg-indigo-50/70 dark:bg-indigo-950/40 text-indigo-950 dark:text-white shadow-xs'
+                          : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-700 dark:text-slate-300'
+                      }`}
+                    >
+                      <div>
+                        <div className="text-xs font-bold font-mono text-indigo-600 dark:text-indigo-400">
+                          {dept.code}
                         </div>
-                        {isSelected && (
-                          <Check className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
-                        )}
-                      </button>
-                    );
-                  })
-                ) : (
-                  <p className="text-xs text-slate-500 italic p-3">
-                    Authoritative department mapping is unverified for this college in TIMTEC v2.0.
-                  </p>
-                )}
+                        <div className="text-xs font-medium">{dept.name}</div>
+                      </div>
+                      {isSelected && (
+                        <Check className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -266,8 +308,111 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             </div>
           )}
 
-          {/* STEP 5: Timetable View Preference */}
+          {/* STEP 5: Course Basket / Registration (Eliminates 64 classes on Monday!) */}
           {step === 5 && (
+            <div className="space-y-4">
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                  Course Enrollment
+                </span>
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white mt-1">
+                  Confirm your registered courses
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Pre-selected for <strong>{currentDeptCode} ({level}L)</strong>. Uncheck any course you are not offering or add carryovers.
+                </p>
+              </div>
+
+              {/* 100L Lab day rotation picker */}
+              {level === '100' && (
+                <div className="p-3.5 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 space-y-2">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-950 dark:text-indigo-200">
+                    <Calendar className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                    <span>Your 100L Lab Practical Day (11 AM – 2 PM)</span>
+                  </div>
+                  <p className="text-[11px] text-indigo-800/80 dark:text-indigo-300/80">
+                    Which day is your department scheduled for Chemistry / Physics / Bio labs?
+                  </p>
+                  <div className="grid grid-cols-4 gap-1.5 pt-1">
+                    {(['Monday', 'Tuesday', 'Wednesday', 'Thursday'] as TimetableDay[]).map((d) => (
+                      <button
+                        key={d}
+                        type="button"
+                        onClick={() => setPracticalDay(d)}
+                        className={`py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors ${
+                          practicalDay === d
+                            ? 'bg-indigo-600 text-white shadow-xs'
+                            : 'bg-white dark:bg-slate-900 border border-indigo-200 dark:border-indigo-800 text-indigo-900 dark:text-indigo-200'
+                        }`}
+                      >
+                        {d.slice(0, 3)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Course Selection List */}
+              <div className="space-y-1.5 max-h-52 overflow-y-auto pr-1 scrollbar-thin">
+                {selectedCourses.length === 0 ? (
+                  <p className="text-xs text-slate-400 italic p-3 text-center">
+                    No courses selected yet. Add your courses below.
+                  </p>
+                ) : (
+                  selectedCourses.map((code) => {
+                    const title = VERIFIED_COURSE_TITLES[code.toUpperCase()];
+                    return (
+                      <div
+                        key={code}
+                        onClick={() => toggleCourse(code)}
+                        className="p-2.5 rounded-xl border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/40 dark:bg-indigo-950/20 flex items-center justify-between text-xs cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-950/40 transition-colors"
+                      >
+                        <div className="flex-1 min-w-0 pr-2">
+                          <span className="font-bold text-indigo-950 dark:text-indigo-200">
+                            {code}
+                          </span>
+                          {title && (
+                            <span className="text-[11px] text-slate-500 dark:text-slate-400 block truncate">
+                              {title}
+                            </span>
+                          )}
+                        </div>
+                        <span className="p-1 rounded-md bg-indigo-600 text-white shrink-0">
+                          <Check className="w-3 h-3" />
+                        </span>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+
+              {/* Add Extra / Carryover Course Form */}
+              <form onSubmit={handleAddExtraCourse} className="flex gap-2 pt-1">
+                <input
+                  type="text"
+                  value={extraCourseInput}
+                  onChange={(e) => setExtraCourseInput(e.target.value)}
+                  placeholder="Add carryover or elective (e.g. MTS 101, GNS 111)..."
+                  className="flex-1 px-3 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+                <button
+                  type="submit"
+                  disabled={!extraCourseInput.trim()}
+                  className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold disabled:opacity-50 transition-colors flex items-center gap-1"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add</span>
+                </button>
+              </form>
+
+              <div className="text-[11px] text-slate-400 font-mono">
+                {selectedCourses.length} {selectedCourses.length === 1 ? 'course' : 'courses'} selected for your timetable.
+              </div>
+            </div>
+          )}
+
+          {/* STEP 6: Timetable View Preference */}
+          {step === 6 && (
             <div className="space-y-4">
               <div>
                 <span className="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
@@ -319,7 +464,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="px-6 py-4 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/60 flex items-center justify-between">
+        <div className="px-5 py-3.5 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/60 flex items-center justify-between">
           {step === 1 ? (
             <button
               onClick={handleSkipName}
@@ -340,7 +485,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             onClick={handleNext}
             className="inline-flex items-center gap-2 px-5 py-2 text-xs font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition-all active:scale-95"
           >
-            <span>{step === 5 ? 'Open Timetable' : 'Continue'}</span>
+            <span>{step === 6 ? 'Open Timetable' : 'Continue'}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>

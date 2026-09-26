@@ -1,5 +1,5 @@
 import React from 'react';
-import { TIMETABLE_SESSIONS, OFFICIAL_METADATA } from '../data/timetable';
+import { TIMETABLE_SESSIONS, OFFICIAL_METADATA, VERIFIED_COURSE_TITLES } from '../data/timetable';
 import { X, Plus, Check, Clock, MapPin, Navigation, ShieldCheck } from 'lucide-react';
 
 interface CourseModalProps {
@@ -25,6 +25,7 @@ export const CourseModal: React.FC<CourseModalProps> = ({
   const sample = sessions[0];
   const isPractical = sessions.some((s) => s.isPractical);
   const isVirtual = sessions.some((s) => s.isVirtual);
+  const courseTitle = VERIFIED_COURSE_TITLES[courseCode.toUpperCase().trim()];
 
   const handleDirections = (venue: string) => {
     window.open(OFFICIAL_METADATA.directionServiceUrl, '_blank', 'noopener,noreferrer');
@@ -54,8 +55,8 @@ export const CourseModal: React.FC<CourseModalProps> = ({
             <h2 className="text-2xl font-black text-slate-900 dark:text-white mt-1 tracking-tight">
               {courseCode}
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Official lecture & practical timetable specification
+            <p className="text-xs font-medium text-slate-700 dark:text-slate-300 mt-0.5">
+              {courseTitle ? courseTitle : 'Official lecture & practical timetable specification'}
             </p>
           </div>
 

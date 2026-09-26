@@ -283,16 +283,21 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           Credits & Origin
         </h3>
 
-        <div className="space-y-1 text-xs text-slate-600 dark:text-slate-300">
-          <p className="font-semibold text-slate-900 dark:text-white">
+        <div className="space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
+          <p className="font-bold text-slate-900 dark:text-white text-sm">
             Class Ease
           </p>
-          <p>
-            Designed & built by <strong>Sisco</strong> ({OFFICIAL_METADATA.credits.fullName})
-          </p>
-          <p className="text-slate-500">
-            {OFFICIAL_METADATA.credits.brand}
-          </p>
+          <div className="pt-0.5 space-y-0.5">
+            <p className="font-semibold text-slate-900 dark:text-white">
+              Designed & built by <strong className="text-indigo-600 dark:text-indigo-400">Sisco</strong>
+            </p>
+            <p className="text-slate-800 dark:text-slate-200">
+              Sholuade AbdulRasak Akorede
+            </p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+              Cyber Security Student • COLCOMPS (College of Computing)
+            </p>
+          </div>
           <div className="pt-2">
             <a
               href={OFFICIAL_METADATA.credits.portfolioUrl}

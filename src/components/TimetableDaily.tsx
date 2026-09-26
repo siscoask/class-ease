@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TimetableSession, PersonalEvent, TimetableDay } from '../types';
-import { ACADEMIC_DAYS } from '../utils/scheduleLogic';
+import { ACADEMIC_DAYS, getCampusNow } from '../utils/scheduleLogic';
 import { TodayTimeline } from './TodayTimeline';
 
 interface TimetableDailyProps {
@@ -15,19 +15,27 @@ interface TimetableDailyProps {
 export const TimetableDaily: React.FC<TimetableDailyProps> = ({
   sessions,
   personalEvents,
-  initialDay = 'Monday',
+  initialDay,
   onSelectCourse,
   onSelectVenue,
   onAddPersonalEvent,
 }) => {
-  const [selectedDay, setSelectedDay] = useState<TimetableDay>(initialDay);
+  const campus = getCampusNow();
+  const defaultDay: TimetableDay = initialDay
+    ? initialDay
+    : campus.isAcademicDay
+    ? (campus.day as TimetableDay)
+    : 'Monday';
+
+  const [selectedDay, setSelectedDay] = useState<TimetableDay>(defaultDay);
 
   return (
     <div className="space-y-5">
       {/* Day Selector Tabs */}
-      <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-slate-800/80 overflow-x-auto">
+      <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-slate-800/80 overflow-x-auto scrollbar-thin">
         {ACADEMIC_DAYS.map((day) => {
           const isSelected = selectedDay === day;
+          const isToday = campus.day === day;
           const count = sessions.filter((s) => s.day === day).length;
           return (
             <button
@@ -39,7 +47,12 @@ export const TimetableDaily: React.FC<TimetableDailyProps> = ({
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              <span>{day.slice(0, 3)}</span>
+              <div className="flex items-center gap-1">
+                <span>{day.slice(0, 3)}</span>
+                {isToday && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" title="Today" />
+                )}
+              </div>
               <span className="text-[10px] font-mono opacity-70">
                 {count} {count === 1 ? 'class' : 'classes'}
               </span>

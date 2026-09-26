@@ -32,7 +32,7 @@ export const TimetablePage: React.FC<TimetablePageProps> = ({
   onOpenAddPersonalEvent,
 }) => {
   const [viewMode, setViewMode] = useState<TimetableViewMode>(preferredView);
-  const [filterType, setFilterType] = useState<'all' | 'classes' | 'practicals' | 'virtual' | 'personal'>('all');
+  const [filterType, setFilterType] = useState<'all' | 'physical' | 'virtual' | 'practicals' | 'personal'>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleViewChange = (mode: TimetableViewMode) => {
@@ -43,9 +43,9 @@ export const TimetablePage: React.FC<TimetablePageProps> = ({
   // Filter sessions
   const filteredSessions = sessions.filter((s) => {
     // Type filter
-    if (filterType === 'practicals' && !s.isPractical) return false;
+    if (filterType === 'physical' && s.isVirtual) return false;
     if (filterType === 'virtual' && !s.isVirtual) return false;
-    if (filterType === 'classes' && s.isPractical) return false;
+    if (filterType === 'practicals' && !s.isPractical) return false;
     if (filterType === 'personal') return false; // Handled separately
 
     // Search query match
@@ -60,7 +60,7 @@ export const TimetablePage: React.FC<TimetablePageProps> = ({
 
   // Filter personal events
   const filteredPersonal = personalEvents.filter((p) => {
-    if (filterType === 'classes' || filterType === 'practicals' || filterType === 'virtual') {
+    if (filterType === 'physical' || filterType === 'virtual' || filterType === 'practicals') {
       return false;
     }
     if (searchQuery.trim()) {
@@ -71,12 +71,16 @@ export const TimetablePage: React.FC<TimetablePageProps> = ({
     return true;
   });
 
+  const physicalCount = sessions.filter((s) => !s.isVirtual && !s.isPractical).length;
+  const virtualCount = sessions.filter((s) => s.isVirtual).length;
+  const practicalCount = sessions.filter((s) => s.isPractical).length;
+
   const filterTabs = [
-    { id: 'all', label: 'All Items' },
-    { id: 'classes', label: 'Lectures Only' },
-    { id: 'practicals', label: 'Practicals' },
-    { id: 'virtual', label: 'Virtual' },
-    { id: 'personal', label: 'Personal' },
+    { id: 'all', label: `All (${sessions.length})` },
+    { id: 'physical', label: `Physical In-Person (${physicalCount})` },
+    { id: 'virtual', label: `Virtual Streams (${virtualCount})` },
+    { id: 'practicals', label: `Practicals (${practicalCount})` },
+    { id: 'personal', label: `Personal (${personalEvents.length})` },
   ];
 
   return (

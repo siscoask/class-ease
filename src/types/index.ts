@@ -42,6 +42,8 @@ export interface UserProfile {
   departmentId: string;
   level: string;
   selectedCourseCodes: string[];
+  streamPreferences?: Record<string, string>; // e.g. { "MTS 105": "A" }
+  practicalDayPreferences?: Record<string, TimetableDay>; // e.g. { "CHM 191": "Tuesday" }
   preferredView: TimetableViewMode;
   darkMode: boolean;
   onboardingCompleted: boolean;
@@ -95,6 +97,15 @@ export type TimelineItem =
       startMinutes: number;
       endMinutes: number;
       hasClash?: boolean;
+    }
+  | {
+      kind: 'sports';
+      id: string;
+      title: string;
+      startTime: string;
+      endTime: string;
+      startMinutes: number;
+      endMinutes: number;
     }
   | {
       kind: 'free';

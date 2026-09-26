@@ -123,7 +123,30 @@ export const TodayTimeline: React.FC<TodayTimelineProps> = ({
           );
         }
 
-        // CASE 2: Personal Event
+        // CASE 2: University Sports Window
+        if (item.kind === 'sports') {
+          return (
+            <div key={item.id} className="relative group">
+              <div className="absolute -left-6 md:-left-8 top-3 w-4 md:w-5 h-4 md:h-5 rounded-full border-2 border-emerald-500 bg-white dark:bg-slate-900" />
+              <div className="p-3.5 rounded-xl border border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/40 dark:bg-emerald-950/20 text-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <div className="flex items-center gap-1.5 font-bold text-emerald-950 dark:text-emerald-200">
+                    <span>🏆</span>
+                    <span>{item.title}</span>
+                  </div>
+                  <span className="font-mono text-emerald-800/80 dark:text-emerald-300/80">
+                    {item.startTime} – {item.endTime}
+                  </span>
+                </div>
+                <p className="text-[11px] text-emerald-800/70 dark:text-emerald-300/70 mt-0.5">
+                  Reserved university-wide across FUNAAB for inter-hall, departmental, and SU games.
+                </p>
+              </div>
+            </div>
+          );
+        }
+
+        // CASE 3: Personal Event
         if (item.kind === 'personal') {
           const e = item.event;
           return (

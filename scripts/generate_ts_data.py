@@ -100,11 +100,23 @@ verified_colleges = [
         ]
     },
     {
+        "id": "COLCOMPS",
+        "name": "College of Computing",
+        "departments": [
+            {"id": "CSC", "name": "Computer Science", "code": "CSC"},
+            {"id": "CYB", "name": "Cyber Security", "code": "CYB"},
+            {"id": "SEN", "name": "Software Engineering", "code": "SEN"},
+            {"id": "IFT", "name": "Information Technology", "code": "IFT"},
+            {"id": "INS", "name": "Information Systems", "code": "INS"},
+            {"id": "DTS", "name": "Data Science", "code": "DTS"},
+        ]
+    },
+    {
         "id": "COLPHYS",
         "name": "College of Physical Sciences",
         "departments": [
-            {"id": "CSC", "name": "Computer Science", "code": "CSC"},
-            {"id": "CHM", "name": "Chemistry", "code": "CHM"},
+            {"id": "CHM", "name": "Pure Chemistry", "code": "CHM"},
+            {"id": "ICH", "name": "Industrial Chemistry", "code": "ICH"},
             {"id": "MTS", "name": "Mathematics", "code": "MTS"},
             {"id": "PHS", "name": "Physics", "code": "PHS"},
             {"id": "STA", "name": "Statistics", "code": "STA"},
@@ -193,6 +205,95 @@ verified_colleges = [
     }
 ]
 
+course_titles = {
+  "CSC 101": "Introduction to Computer Science",
+  "CSC 201": "Computer Programming I",
+  "CSC 203": "Computer Programming II",
+  "CSC 205": "Operating Systems I",
+  "CSC 209": "Introduction to Web Development",
+  "CSC 217": "Computer Architecture",
+  "CSC 221": "Foundations of Sequential Programs",
+  "CSC 225": "Structured Programming",
+  "CSC 271": "Object-Oriented Programming",
+  "CSC 301": "Structured Programming",
+  "CSC 305": "Data Structures and Algorithms",
+  "CSC 307": "Operating Systems II",
+  "CSC 311": "Systems Analysis and Design",
+  "CSC 337": "Database Management Systems",
+  "CSC 339": "Internet Technologies",
+  "CSC 401": "Software Engineering",
+  "CSC 403": "Algorithm Design and Analysis",
+  "CSC 405": "Artificial Intelligence",
+  "CSC 407": "Computer Graphics",
+  "CSC 431": "Compiler Construction",
+  "CSC 443": "Human-Computer Interaction",
+  "CYB 113": "Introduction to Cyber Security",
+  "CYB 201": "Fundamentals of Information Security",
+  "CYB 203": "Cyber Ethics and Privacy",
+  "CYB 205": "Secure Programming",
+  "CYB 311": "Network Security",
+  "SEN 101": "Introduction to Software Engineering",
+  "SEN 201": "Software Requirements and Modeling",
+  "SEN 203": "Software Construction",
+  "SEN 301": "Software Architecture and Design",
+  "IFT 201": "Basics of Information Technology",
+  "IFT 301": "Web and Mobile Application Development",
+  "DTS 201": "Introduction to Data Science",
+  "MTS 101": "Elementary Mathematics I (Algebra & Trigonometry)",
+  "MTS 103": "Elementary Mathematics II (Vectors & Geometry)",
+  "MTS 105": "Mathematics for Biological & Social Sciences",
+  "MTS 201": "Mathematical Methods I",
+  "MTS 203": "Advanced Calculus",
+  "MTS 211": "Abstract Algebra",
+  "MTS 223": "Numerical Analysis I",
+  "MTS 301": "Complex Analysis",
+  "MTS 341": "Linear Algebra",
+  "BIO 101": "General Biology I",
+  "BIO 103": "Introductory Ecology",
+  "BIO 105": "Introductory Botany",
+  "BIO 107": "General Biology Laboratory I",
+  "BIO 191": "Biology Practical I",
+  "CHM 101": "General Chemistry I",
+  "CHM 103": "Introductory Organic Chemistry",
+  "CHM 107": "General Chemistry Practical",
+  "CHM 191": "Chemistry Practical I",
+  "ICH 201": "Fundamentals of Industrial Chemistry",
+  "ICH 203": "Chemical Process Principles",
+  "ICH 205": "Industrial Chemical Processes",
+  "ICH 207": "Chemical Engineering Thermodynamics",
+  "ICH 213": "Chemistry of Industrial Minerals",
+  "ICH 251": "Industrial Raw Materials",
+  "ICH 263": "Inorganic Chemical Technology",
+  "ICH 265": "Organic Chemical Technology",
+  "ICH 299": "Industrial Chemistry Workshop",
+  "GET 101": "Engineer in Society",
+  "GET 201": "Applied Electricity & Electronics",
+  "PHS 101": "General Physics I",
+  "PHY 101": "General Physics I",
+  "PHS 103": "General Physics II (Sound & Waves)",
+  "PHS 105": "Physics for Biological Sciences",
+  "PHS 191": "Physics Practical I",
+  "PHY 107": "Physics Practical I",
+  "GNS 101": "Use of Library",
+  "GNS 105": "Citizenship Education",
+  "GNS 107": "Peace Studies and Conflict Resolution",
+  "GNS 111": "Use of English I",
+  "GNS 201": "Science, Technology and Society",
+  "GNS 202": "Introduction to Philosophy and Logic",
+  "GNS 203": "African History and Culture",
+  "GST 111": "Communication in English",
+  "GST 112": "Logic, Philosophy and Human Existence",
+  "GST 201": "Entrepreneurship and Innovation",
+  "PCP 191": "Introductory Crop Production Practical",
+  "BCH 201": "General Biochemistry I",
+  "BCH 301": "Enzymology",
+  "MCB 201": "General Microbiology",
+  "ABE 201": "Introduction to Agricultural Engineering",
+  "CVE 201": "Engineer in Society",
+  "ELE 201": "Applied Electricity I",
+  "MCE 201": "Engineering Mechanics I"
+}
+
 ts_content = f"""/**
  * Class Ease - Official FUNAAB Timetable Dataset
  * Source: 2026/2027 First Semester Lecture Time-Table — Version 2.0
@@ -272,13 +373,15 @@ export const OFFICIAL_METADATA = {{
   ],
   credits: {{
     builder: 'Sisco',
-    fullName: 'Sholuade Abdulrasak Akorede',
-    brand: 'Sisco Ask',
+    fullName: 'Sholuade AbdulRasak Akorede',
+    role: 'Cyber Security Student • COLCOMPS (College of Computing)',
     portfolioUrl: 'https://siscoask.vercel.app'
   }}
 }} as const;
 
 export const VERIFIED_COLLEGES: VerifiedCollege[] = {json.dumps(verified_colleges, indent=2)};
+
+export const VERIFIED_COURSE_TITLES: Record<string, string> = {json.dumps(course_titles, indent=2)};
 
 export const OFFICIAL_VENUES: VenueDirectoryItem[] = {json.dumps(official_venues, indent=2)};
 

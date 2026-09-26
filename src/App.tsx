@@ -10,6 +10,7 @@ import {
   resetAllLocalData,
 } from './utils/storage';
 import { TIMETABLE_SESSIONS } from './data/timetable';
+import { getDepartmentSuggestedCourses } from './utils/scheduleLogic';
 import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
 import { OfflineIndicator } from './components/OfflineIndicator';
@@ -121,19 +122,42 @@ export default function App() {
   };
 
   // Determine active sessions for the user:
-  // If user selected courses explicitly, use them.
-  // Otherwise, default to sessions matching their academic level (e.g. 100 level courses for 100L).
+  // If user selected courses explicitly, use them and apply practical day preferences.
+  // Otherwise, default safely to the student's department code to avoid 64-class pollution.
   const activeSessions: TimetableSession[] = React.useMemo(() => {
     if (profile.selectedCourseCodes && profile.selectedCourseCodes.length > 0) {
-      return TIMETABLE_SESSIONS.filter((s) =>
+      let sessions = TIMETABLE_SESSIONS.filter((s) =>
         profile.selectedCourseCodes.includes(s.courseCode)
       );
+
+      // Filter practicals if practicalDayPreferences is specified for 100L practicals
+      if (profile.practicalDayPreferences) {
+        sessions = sessions.filter((s) => {
+          if (!s.isPractical) return true;
+          const assignedDay = profile.practicalDayPreferences?.[s.courseCode];
+          if (assignedDay) {
+            return s.day === assignedDay;
+          }
+          return true;
+        });
+      }
+
+      return sessions;
     }
-    // Default smart filter based on user level
+
+    // Fallback: Resolve the student's complete departmental & faculty curriculum!
+    // This includes shared computing courses (e.g. CYB takes CSC & MTS on Friday),
+    // borrowed faculty courses, and 100L general university courses.
+    const dept = profile.departmentId || 'CYB';
     const userLvl = profile.level || '100';
-    const levelSessions = TIMETABLE_SESSIONS.filter((s) => s.level === userLvl);
-    return levelSessions.length > 0 ? levelSessions : TIMETABLE_SESSIONS.slice(0, 50);
-  }, [profile.selectedCourseCodes, profile.level]);
+    const suggestedCodes = getDepartmentSuggestedCourses(dept, userLvl, TIMETABLE_SESSIONS);
+
+    if (suggestedCodes.length > 0) {
+      return TIMETABLE_SESSIONS.filter((s) => suggestedCodes.includes(s.courseCode));
+    }
+
+    return TIMETABLE_SESSIONS.filter((s) => s.level === userLvl).slice(0, 15);
+  }, [profile.selectedCourseCodes, profile.departmentId, profile.level, profile.practicalDayPreferences]);
 
   if (!isLoaded) {
     return (

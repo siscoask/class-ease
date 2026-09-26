@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { TimetableSession } from '../types';
 import { calculateNextClassState, formatRelativeMinutes } from '../utils/scheduleLogic';
-import { OFFICIAL_METADATA } from '../data/timetable';
+import { OFFICIAL_METADATA, VERIFIED_COURSE_TITLES } from '../data/timetable';
 import { MapPin, Navigation, Clock, CheckCircle2, Calendar, Radio } from 'lucide-react';
 
 interface NextClassCardProps {
@@ -15,17 +15,17 @@ export const NextClassCard: React.FC<NextClassCardProps> = ({
   onSelectCourse,
   onSelectVenue,
 }) => {
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [, setTick] = useState<number>(0);
 
-  // Update clock every 30 seconds for live countdown
+  // Update clock every 15 seconds for live countdown
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentDate(new Date());
-    }, 30000);
+      setTick((t) => t + 1);
+    }, 15000);
     return () => clearInterval(timer);
   }, []);
 
-  const state = calculateNextClassState(sessions, currentDate);
+  const state = calculateNextClassState(sessions);
 
   // External Direction link handler
   const handleDirections = (venue: string) => {
@@ -36,6 +36,7 @@ export const NextClassCard: React.FC<NextClassCardProps> = ({
   // State 1: Active class right now
   if (state.status === 'now' && state.currentSession) {
     const session = state.currentSession;
+    const title = VERIFIED_COURSE_TITLES[session.courseCode.toUpperCase()];
     return (
       <div className="relative overflow-hidden rounded-2xl bg-indigo-900 text-white p-5 md:p-6 shadow-md border border-indigo-800">
         <div className="absolute top-0 right-0 translate-x-8 -translate-y-8 w-44 h-44 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
@@ -60,10 +61,15 @@ export const NextClassCard: React.FC<NextClassCardProps> = ({
           <div>
             <button
               onClick={() => onSelectCourse?.(session.courseCode)}
-              className="text-2xl md:text-3xl font-extrabold tracking-tight hover:underline text-left"
+              className="text-2xl md:text-3xl font-extrabold tracking-tight hover:underline text-left block"
             >
               {session.courseCode}
             </button>
+            {title && (
+              <p className="text-xs font-medium text-indigo-200 mt-0.5 truncate max-w-md">
+                {title}
+              </p>
+            )}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-indigo-200">
               <span className="inline-flex items-center gap-1 font-mono">
                 <Clock className="w-3.5 h-3.5 text-indigo-300" />
@@ -97,6 +103,7 @@ export const NextClassCard: React.FC<NextClassCardProps> = ({
   // State 2: Next Upcoming Class Today
   if (state.status === 'upcoming' && state.nextSession) {
     const session = state.nextSession;
+    const title = VERIFIED_COURSE_TITLES[session.courseCode.toUpperCase()];
     return (
       <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white p-5 md:p-6 shadow-sm border border-slate-200 dark:border-slate-800">
         <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
@@ -116,10 +123,15 @@ export const NextClassCard: React.FC<NextClassCardProps> = ({
           <div>
             <button
               onClick={() => onSelectCourse?.(session.courseCode)}
-              className="text-2xl md:text-3xl font-extrabold tracking-tight hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-left"
+              className="text-2xl md:text-3xl font-extrabold tracking-tight hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-left block"
             >
               {session.courseCode}
             </button>
+            {title && (
+              <p className="text-xs font-medium text-slate-600 dark:text-slate-300 mt-0.5 truncate max-w-md">
+                {title}
+              </p>
+            )}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-slate-500 dark:text-slate-400">
               <span className="inline-flex items-center gap-1 font-mono">
                 <Clock className="w-3.5 h-3.5 text-slate-400" />

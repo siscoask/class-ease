@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { COURSE_CATALOG } from '../data/timetable';
+import { COURSE_CATALOG, VERIFIED_COURSE_TITLES } from '../data/timetable';
 import { matchCourseSearch } from '../utils/scheduleLogic';
 import { Search, Plus, Check, BookOpen, Layers } from 'lucide-react';
 
@@ -18,17 +18,26 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [levelFilter, setLevelFilter] = useState<string>('all');
+  const [deliveryFilter, setDeliveryFilter] = useState<'all' | 'physical' | 'virtual'>('all');
   const [onlyPracticals, setOnlyPracticals] = useState(false);
   const [onlyEnrolled, setOnlyEnrolled] = useState(false);
 
   // Filter courses
   const filteredCourses = COURSE_CATALOG.filter((c) => {
-    // Search
-    if (searchQuery.trim() && !matchCourseSearch(c.code, searchQuery)) {
+    const courseTitle = VERIFIED_COURSE_TITLES[c.code.toUpperCase().trim()];
+    // Search by code and verified title
+    if (searchQuery.trim() && !matchCourseSearch(c.code, searchQuery, courseTitle)) {
       return false;
     }
     // Level
     if (levelFilter !== 'all' && c.level !== levelFilter) {
+      return false;
+    }
+    // Delivery mode
+    if (deliveryFilter === 'physical' && c.isVirtual) {
+      return false;
+    }
+    if (deliveryFilter === 'virtual' && !c.isVirtual) {
       return false;
     }
     // Practical
@@ -97,7 +106,41 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
             })}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5 pt-1 sm:pt-0">
+            {/* Delivery mode pills */}
+            <div className="flex items-center gap-1 p-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-[11px]">
+              <button
+                onClick={() => setDeliveryFilter('all')}
+                className={`px-2 py-1 rounded-md font-medium transition-colors ${
+                  deliveryFilter === 'all'
+                    ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-300 shadow-2xs font-semibold'
+                    : 'text-slate-600 dark:text-slate-400'
+                }`}
+              >
+                All Modes
+              </button>
+              <button
+                onClick={() => setDeliveryFilter('physical')}
+                className={`px-2 py-1 rounded-md font-medium transition-colors ${
+                  deliveryFilter === 'physical'
+                    ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-300 shadow-2xs font-semibold'
+                    : 'text-slate-600 dark:text-slate-400'
+                }`}
+              >
+                Physical
+              </button>
+              <button
+                onClick={() => setDeliveryFilter('virtual')}
+                className={`px-2 py-1 rounded-md font-medium transition-colors ${
+                  deliveryFilter === 'virtual'
+                    ? 'bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-300 shadow-2xs font-semibold'
+                    : 'text-slate-600 dark:text-slate-400'
+                }`}
+              >
+                Virtual
+              </button>
+            </div>
+
             <button
               onClick={() => setOnlyPracticals(!onlyPracticals)}
               className={`px-2.5 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
@@ -106,7 +149,7 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
                   : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400'
               }`}
             >
-              Practicals Only
+              Practicals
             </button>
 
             <button
@@ -168,6 +211,12 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
                   >
                     {course.code}
                   </button>
+
+                  {VERIFIED_COURSE_TITLES[course.code.toUpperCase().trim()] && (
+                    <p className="text-xs text-slate-600 dark:text-slate-300 font-medium truncate mt-0.5">
+                      {VERIFIED_COURSE_TITLES[course.code.toUpperCase().trim()]}
+                    </p>
+                  )}
 
                   <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
                     <Layers className="w-3.5 h-3.5 text-slate-400" />
