@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { OFFICIAL_VENUES, OFFICIAL_METADATA } from '../data/timetable';
 import { matchVenueSearch } from '../utils/scheduleLogic';
-import { Search, MapPin, Users, ExternalLink, Navigation } from 'lucide-react';
+import { Search, MapPin, Users, ExternalLink, Navigation, Compass } from 'lucide-react';
 
 interface VenuesPageProps {
   onSelectVenue: (name: string) => void;
@@ -40,7 +40,7 @@ export const VenuesPage: React.FC<VenuesPageProps> = ({ onSelectVenue }) => {
         </p>
       </div>
 
-      {/* External Direction Service Notice */}
+      {/* External Direction & Campus Guide Notice */}
       <div className="p-4 rounded-xl bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div>
           <h4 className="font-bold text-indigo-950 dark:text-indigo-200 flex items-center gap-1.5">
@@ -48,17 +48,29 @@ export const VenuesPage: React.FC<VenuesPageProps> = ({ onSelectVenue }) => {
             Campus Walking & Driving Directions
           </h4>
           <p className="text-indigo-800/80 dark:text-indigo-300/80 mt-0.5">
-            Class Ease organizes your academic schedule. Campus navigation is provided externally via <strong>funaab.getdirection.xyz</strong>.
+            Class Ease organizes your academic schedule. Campus navigation is provided externally via <strong>funaab.getdirection.xyz</strong>. For general university life & guides, visit <strong>funaab101.xyz</strong>.
           </p>
         </div>
 
-        <button
-          onClick={handleExternalDirections}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition-colors shrink-0 shadow-xs"
-        >
-          <span>Open GetDirection</span>
-          <ExternalLink className="w-3 h-3" />
-        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          <a
+            href="https://funaab101.xyz"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-indigo-300 dark:border-indigo-800 bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-300 font-semibold hover:bg-indigo-50 dark:hover:bg-slate-800 transition-colors shadow-2xs"
+          >
+            <Compass className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
+            <span>FUNAAB 101</span>
+          </a>
+
+          <button
+            onClick={handleExternalDirections}
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition-colors shadow-xs"
+          >
+            <span>GetDirection</span>
+            <ExternalLink className="w-3 h-3" />
+          </button>
+        </div>
       </div>
 
       {/* Search Input */}

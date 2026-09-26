@@ -10,7 +10,11 @@ import {
   resetAllLocalData,
 } from './utils/storage';
 import { TIMETABLE_SESSIONS } from './data/timetable';
-import { getDepartmentSuggestedCourses } from './utils/scheduleLogic';
+import {
+  getDepartmentSuggestedCourses,
+  isSessionMatchingCourse,
+  getRootCourseCode,
+} from './utils/scheduleLogic';
 import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
 import { OfflineIndicator } from './components/OfflineIndicator';
@@ -64,6 +68,25 @@ export default function App() {
     loadData();
   }, []);
 
+  // Always reset scroll to top immediately whenever changing views/tabs
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [currentTab]);
+
+  // Tab selection handler: if already on tab, smoothly scroll up; otherwise switch tab & reset to top
+  const handleSelectTab = (tab: string) => {
+    if (tab === currentTab) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    } else {
+      setCurrentTab(tab);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+  };
+
   // Update dark mode
   const toggleDarkMode = () => {
     const nextMode = !profile.darkMode;
@@ -86,14 +109,25 @@ export default function App() {
 
   // Course toggle enrollment
   const handleToggleCourseEnrollment = (code: string) => {
+    const root = getRootCourseCode(code);
     const currentCodes = profile.selectedCourseCodes || [];
     let updatedCodes: string[];
-    if (currentCodes.includes(code)) {
-      updatedCodes = currentCodes.filter((c) => c !== code);
+    if (currentCodes.includes(root) || currentCodes.includes(code)) {
+      updatedCodes = currentCodes.filter((c) => c !== root && c !== code);
     } else {
-      updatedCodes = [...currentCodes, code];
+      updatedCodes = [...currentCodes, root];
     }
     const updatedProfile = { ...profile, selectedCourseCodes: updatedCodes };
+    setProfile(updatedProfile);
+    saveStoredProfile(updatedProfile);
+  };
+
+  // Sync complete recommended department & faculty curriculum
+  const handleSyncDepartmentCurriculum = () => {
+    const dept = profile.departmentId || 'CYB';
+    const lvl = profile.level || '100';
+    const fullBasket = getDepartmentSuggestedCourses(dept, lvl, TIMETABLE_SESSIONS);
+    const updatedProfile = { ...profile, selectedCourseCodes: fullBasket };
     setProfile(updatedProfile);
     saveStoredProfile(updatedProfile);
   };
@@ -122,41 +156,61 @@ export default function App() {
   };
 
   // Determine active sessions for the user:
-  // If user selected courses explicitly, use them and apply practical day preferences.
-  // Otherwise, default safely to the student's department code to avoid 64-class pollution.
+  // If user selected courses explicitly, match them via isSessionMatchingCourse.
+  // Auto-heals incomplete single-course legacy state and resolves shared faculty courses.
   const activeSessions: TimetableSession[] = React.useMemo(() => {
-    if (profile.selectedCourseCodes && profile.selectedCourseCodes.length > 0) {
-      let sessions = TIMETABLE_SESSIONS.filter((s) =>
-        profile.selectedCourseCodes.includes(s.courseCode)
-      );
-
-      // Filter practicals if practicalDayPreferences is specified for 100L practicals
-      if (profile.practicalDayPreferences) {
-        sessions = sessions.filter((s) => {
-          if (!s.isPractical) return true;
-          const assignedDay = profile.practicalDayPreferences?.[s.courseCode];
-          if (assignedDay) {
-            return s.day === assignedDay;
-          }
-          return true;
-        });
-      }
-
-      return sessions;
-    }
-
-    // Fallback: Resolve the student's complete departmental & faculty curriculum!
-    // This includes shared computing courses (e.g. CYB takes CSC & MTS on Friday),
-    // borrowed faculty courses, and 100L general university courses.
     const dept = profile.departmentId || 'CYB';
     const userLvl = profile.level || '100';
-    const suggestedCodes = getDepartmentSuggestedCourses(dept, userLvl, TIMETABLE_SESSIONS);
 
-    if (suggestedCodes.length > 0) {
-      return TIMETABLE_SESSIONS.filter((s) => suggestedCodes.includes(s.courseCode));
+    let activeCodes = profile.selectedCourseCodes;
+
+    // Auto-heal legacy 1-class bug where only CYB 113 was saved
+    if (activeCodes && activeCodes.length === 1 && activeCodes[0] === 'CYB 113') {
+      const fullBasket = getDepartmentSuggestedCourses(dept, userLvl, TIMETABLE_SESSIONS);
+      activeCodes = fullBasket;
     }
 
-    return TIMETABLE_SESSIONS.filter((s) => s.level === userLvl).slice(0, 15);
+    let candidateSessions: TimetableSession[] = [];
+
+    if (activeCodes && activeCodes.length > 0) {
+      candidateSessions = TIMETABLE_SESSIONS.filter((s) =>
+        activeCodes.some((code) => isSessionMatchingCourse(s.courseCode, code))
+      );
+    } else {
+      const suggestedCodes = getDepartmentSuggestedCourses(dept, userLvl, TIMETABLE_SESSIONS);
+      candidateSessions = TIMETABLE_SESSIONS.filter((s) =>
+        suggestedCodes.some((code) => isSessionMatchingCourse(s.courseCode, code))
+      );
+    }
+
+    // Filter practicals if practicalDayPreferences is specified for 100L practicals
+    if (profile.practicalDayPreferences) {
+      candidateSessions = candidateSessions.filter((s) => {
+        if (!s.isPractical) return true;
+        const root = getRootCourseCode(s.courseCode);
+        const assignedDay =
+          profile.practicalDayPreferences?.[root] ||
+          profile.practicalDayPreferences?.[s.courseCode];
+        if (assignedDay) {
+          return s.day === assignedDay;
+        }
+        return true;
+      });
+    }
+
+    // Consolidate identical concurrent multi-streams (e.g. MTS 105 (A), (B), (C) at Friday 2:30 PM)
+    const seenSlots = new Set<string>();
+    const deduplicatedSessions: TimetableSession[] = [];
+    for (const session of candidateSessions) {
+      const root = getRootCourseCode(session.courseCode);
+      const slotKey = `${session.day}-${session.startTime}-${root}`;
+      if (!seenSlots.has(slotKey)) {
+        seenSlots.add(slotKey);
+        deduplicatedSessions.push(session);
+      }
+    }
+
+    return deduplicatedSessions;
   }, [profile.selectedCourseCodes, profile.departmentId, profile.level, profile.practicalDayPreferences]);
 
   if (!isLoaded) {
@@ -175,7 +229,7 @@ export default function App() {
       {/* Header */}
       <Header
         currentTab={currentTab}
-        onSelectTab={setCurrentTab}
+        onSelectTab={handleSelectTab}
         darkMode={profile.darkMode}
         onToggleDarkMode={toggleDarkMode}
       />
@@ -187,7 +241,7 @@ export default function App() {
             userProfile={profile}
             activeSessions={activeSessions}
             personalEvents={personalEvents}
-            onNavigateTab={setCurrentTab}
+            onNavigateTab={handleSelectTab}
             onSelectCourse={setSelectedCourse}
             onSelectVenue={setSelectedVenue}
             onOpenAddPersonalEvent={(day, time) => {
@@ -195,6 +249,7 @@ export default function App() {
               setIsAddingPersonalEvent(true);
             }}
             onOpenShareModal={() => setShowShareModal(true)}
+            onSyncDepartmentCurriculum={handleSyncDepartmentCurriculum}
           />
         )}
 
@@ -255,6 +310,7 @@ export default function App() {
             onUpdateProfile={handleUpdateProfile}
             onResetAllData={handleResetAll}
             onToggleDarkMode={toggleDarkMode}
+            onSyncDepartmentCurriculum={handleSyncDepartmentCurriculum}
             onOpenFeedback={() => {
               setFeedbackContext(null);
               setShowFeedbackModal(true);
@@ -266,7 +322,7 @@ export default function App() {
       {/* Mobile Bottom Navigation */}
       <BottomNav
         currentTab={currentTab}
-        onSelectTab={setCurrentTab}
+        onSelectTab={handleSelectTab}
         onOpenFeedback={() => {
           setFeedbackContext(null);
           setShowFeedbackModal(true);

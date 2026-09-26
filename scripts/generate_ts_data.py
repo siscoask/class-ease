@@ -84,6 +84,7 @@ official_venues = [
     {"name": "AUD II", "building": "Opp. COLVET Building", "capacity": 260, "type": "Auditorium"},
     {"name": "AUD III", "building": "Sub Area, Behind CENTS AUD", "capacity": 260, "type": "Auditorium"},
     {"name": "VTH", "building": "Veterinary Teaching Hospital", "capacity": 100, "type": "Clinical Facility"},
+    {"name": "SPORTS COMPLEX", "building": "FUNAAB University Stadium & Sports Complex", "capacity": 3000, "type": "Sports Facility"},
 ]
 
 # Verified Colleges & Departments
@@ -291,8 +292,45 @@ course_titles = {
   "ABE 201": "Introduction to Agricultural Engineering",
   "CVE 201": "Engineer in Society",
   "ELE 201": "Applied Electricity I",
-  "MCE 201": "Engineering Mechanics I"
+  "MCE 201": "Engineering Mechanics I",
+  "SPORTS": "Official University Sports & Inter-Hall Games"
 }
+
+# Official Wednesday University Sports Sessions (TIMTEC v2.0 Page 2-3)
+sessions.append({
+    "id": "sports-wednesday-session-1",
+    "day": "Wednesday",
+    "startTime": "02:00 PM",
+    "endTime": "04:00 PM",
+    "courseCode": "SPORTS",
+    "venue": "SPORTS COMPLEX",
+    "level": "All",
+    "prefix": "SPORTS",
+    "isPractical": False,
+    "isVirtual": False,
+    "academicYear": "2026/2027",
+    "semester": "First Semester",
+    "timetableVersion": "2.0",
+    "source": "Official TIMTEC v2.0 Page 2-3",
+    "verificationStatus": "Official Master Timetable"
+})
+sessions.append({
+    "id": "sports-wednesday-session-2",
+    "day": "Wednesday",
+    "startTime": "04:00 PM",
+    "endTime": "06:00 PM",
+    "courseCode": "SPORTS",
+    "venue": "SPORTS COMPLEX",
+    "level": "All",
+    "prefix": "SPORTS",
+    "isPractical": False,
+    "isVirtual": False,
+    "academicYear": "2026/2027",
+    "semester": "First Semester",
+    "timetableVersion": "2.0",
+    "source": "Official TIMTEC v2.0 Page 2-3",
+    "verificationStatus": "Official Master Timetable"
+})
 
 ts_content = f"""/**
  * Class Ease - Official FUNAAB Timetable Dataset
@@ -366,6 +404,7 @@ export const OFFICIAL_METADATA = {{
   timetableVersion: '2.0',
   committee: 'Time Table and Examination Committee (TIMTEC)',
   directionServiceUrl: 'https://funaab.getdirection.xyz',
+  campusGuideUrl: 'https://funaab101.xyz',
   whatsappSupportNumber: '08128197651',
   timtecContacts: [
     {{ role: 'Chairman TIMTEC', phone: '08034189016' }},

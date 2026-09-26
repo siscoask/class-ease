@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TimetableSession } from '../types';
+import { TimetableSession, TimetableDay } from '../types';
 import { calculateNextClassState, formatRelativeMinutes } from '../utils/scheduleLogic';
 import { OFFICIAL_METADATA, VERIFIED_COURSE_TITLES } from '../data/timetable';
 import { MapPin, Navigation, Clock, CheckCircle2, Calendar, Radio } from 'lucide-react';
@@ -8,12 +8,14 @@ interface NextClassCardProps {
   sessions: TimetableSession[];
   onSelectCourse?: (courseCode: string) => void;
   onSelectVenue?: (venueName: string) => void;
+  onSelectDay?: (day: TimetableDay) => void;
 }
 
 export const NextClassCard: React.FC<NextClassCardProps> = ({
   sessions,
   onSelectCourse,
   onSelectVenue,
+  onSelectDay,
 }) => {
   const [, setTick] = useState<number>(0);
 
@@ -193,8 +195,14 @@ export const NextClassCard: React.FC<NextClassCardProps> = ({
 
         {state.firstSessionNextDay && (
           <button
-            onClick={() => onSelectCourse?.(state.firstSessionNextDay!.courseCode)}
-            className="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline shrink-0"
+            onClick={() => {
+              if (state.nextAcademicDay && onSelectDay) {
+                onSelectDay(state.nextAcademicDay);
+              } else if (state.firstSessionNextDay) {
+                onSelectCourse?.(state.firstSessionNextDay.courseCode);
+              }
+            }}
+            className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline shrink-0"
           >
             Preview {state.nextAcademicDay} schedule →
           </button>
@@ -228,8 +236,14 @@ export const NextClassCard: React.FC<NextClassCardProps> = ({
 
       {state.firstSessionNextDay && (
         <button
-          onClick={() => onSelectCourse?.(state.firstSessionNextDay!.courseCode)}
-          className="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline shrink-0"
+          onClick={() => {
+            if (state.nextAcademicDay && onSelectDay) {
+              onSelectDay(state.nextAcademicDay);
+            } else if (state.firstSessionNextDay) {
+              onSelectCourse?.(state.firstSessionNextDay.courseCode);
+            }
+          }}
+          className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline shrink-0"
         >
           View {state.nextAcademicDay} →
         </button>

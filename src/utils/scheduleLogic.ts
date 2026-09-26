@@ -442,6 +442,47 @@ export function buildDayTimeline(
   return finalTimeline;
 }
 
+/**
+ * Normalizes course code to its fundamental root code (e.g. "MTS 101 (A)" -> "MTS 101", "BIO 101[B]" -> "BIO 101")
+ */
+export function getRootCourseCode(code: string): string {
+  if (!code) return '';
+  return code
+    .replace(/\s*\([A-Za-z0-9,\s]+\)$/, '')
+    .replace(/\s*\[[A-Za-z0-9,\s]+\]$/, '')
+    .trim();
+}
+
+/**
+ * Checks whether a session matches a target course code (handling streams, slash courses, etc.)
+ */
+export function isSessionMatchingCourse(sessionCourseCode: string, targetCourseCode: string): boolean {
+  if (!sessionCourseCode || !targetCourseCode) return false;
+  const s = sessionCourseCode.trim().toUpperCase();
+  const t = targetCourseCode.trim().toUpperCase();
+
+  if (s === t) return true;
+
+  const rootS = getRootCourseCode(s);
+  const rootT = getRootCourseCode(t);
+  if (rootS === rootT || rootS === t || s === rootT) return true;
+
+  // Stream indicators
+  if (s.startsWith(t + ' ') || s.startsWith(t + '(') || s.startsWith(t + '[')) {
+    return true;
+  }
+
+  // Combined slash courses e.g. "CVE 201/GET 101"
+  if (s.includes('/')) {
+    const parts = s.split('/').map((p) => p.trim());
+    if (parts.some((p) => p === t || getRootCourseCode(p) === rootT || p.startsWith(t + ' '))) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 export function matchCourseSearch(courseCode: string, query: string, title?: string): boolean {
   if (!query) return true;
   const q = query.trim().toLowerCase();
@@ -494,7 +535,7 @@ export function getDepartmentSuggestedCourses(
   // 1. Direct Department prefix matching
   for (const s of allSessions) {
     if (s.level === lvl && s.courseCode.toUpperCase().startsWith(codeClean)) {
-      matches.add(s.courseCode);
+      matches.add(getRootCourseCode(s.courseCode));
     }
   }
 
@@ -505,28 +546,28 @@ export function getDepartmentSuggestedCourses(
       const comp100 = ['CSC 101', 'SEN 101', 'CYB 113', 'ICT 107', 'MTS 101', 'MTS 105', 'PHS 101', 'PHY 101', 'CHM 101', 'BIO 101', 'GNS 111', 'GST 111'];
       for (const s of allSessions) {
         if (comp100.some((c) => s.courseCode.toUpperCase().includes(c))) {
-          matches.add(s.courseCode);
+          matches.add(getRootCourseCode(s.courseCode));
         }
       }
     } else if (lvl === '200') {
       const comp200 = ['CSC 201', 'CSC 203', 'CSC 205', 'CSC 215', 'CSC 217', 'CSC 225', 'CYB 201', 'CYB 203', 'CYB 205', 'SEN 201', 'SEN 203', 'SEN 221', 'MTS 201', 'GNS 201'];
       for (const s of allSessions) {
         if (comp200.some((c) => s.courseCode.toUpperCase().includes(c))) {
-          matches.add(s.courseCode);
+          matches.add(getRootCourseCode(s.courseCode));
         }
       }
     } else if (lvl === '300') {
       const comp300 = ['CYB 306', 'CYB 311', 'CSC 301', 'CSC 305', 'CSC 307', 'CSC 311', 'CSC 337', 'CSC 339', 'DTS 301', 'SEN 301', 'SEN 304', 'SEN 305'];
       for (const s of allSessions) {
         if (comp300.some((c) => s.courseCode.toUpperCase().includes(c))) {
-          matches.add(s.courseCode);
+          matches.add(getRootCourseCode(s.courseCode));
         }
       }
     } else if (lvl === '400') {
       const comp400 = ['CSC 401', 'CSC 403', 'CSC 405', 'CSC 407', 'CSC 431', 'CSC 435', 'CSC 439', 'CSC 443', 'CSC 445', 'CSC 447'];
       for (const s of allSessions) {
         if (comp400.some((c) => s.courseCode.toUpperCase().includes(c))) {
-          matches.add(s.courseCode);
+          matches.add(getRootCourseCode(s.courseCode));
         }
       }
     }
@@ -539,7 +580,7 @@ export function getDepartmentSuggestedCourses(
       const sci100 = ['MTS 101', 'MTS 105', 'PHS 101', 'PHY 101', 'CHM 101', 'BIO 101', 'GNS 111', 'GST 111'];
       for (const s of allSessions) {
         if (sci100.some((c) => s.courseCode.toUpperCase().includes(c))) {
-          matches.add(s.courseCode);
+          matches.add(getRootCourseCode(s.courseCode));
         }
       }
     } else if (lvl === '200') {
@@ -547,7 +588,7 @@ export function getDepartmentSuggestedCourses(
         const ich200 = ['ICH 201', 'ICH 203', 'ICH 205', 'CHM 211', 'CHM 221', 'CHM 243', 'CHM 269', 'MTS 201', 'GNS 201'];
         for (const s of allSessions) {
           if (ich200.some((c) => s.courseCode.toUpperCase().includes(c))) {
-            matches.add(s.courseCode);
+            matches.add(getRootCourseCode(s.courseCode));
           }
         }
       }
@@ -561,14 +602,14 @@ export function getDepartmentSuggestedCourses(
       const eng100 = ['GET 101', 'MCE 101', 'MCE 103', 'MTS 101', 'PHS 101', 'CHM 101', 'GNS 111', 'GST 111'];
       for (const s of allSessions) {
         if (eng100.some((c) => s.courseCode.toUpperCase().includes(c))) {
-          matches.add(s.courseCode);
+          matches.add(getRootCourseCode(s.courseCode));
         }
       }
     } else if (lvl === '200') {
       const eng200 = ['GET 201', 'GET 203', 'GET 205', 'GET 207', 'GET 209', 'GET 211', 'MTS 201', 'MTS 203', 'GNS 201'];
       for (const s of allSessions) {
         if (eng200.some((c) => s.courseCode.toUpperCase().includes(c))) {
-          matches.add(s.courseCode);
+          matches.add(getRootCourseCode(s.courseCode));
         }
       }
     }
@@ -580,7 +621,7 @@ export function getDepartmentSuggestedCourses(
     const mgmt100 = ['ACC 101', 'BAM 101', 'BFN 101', 'ECO 101', 'ETS 101', 'MTS 105', 'GNS 111', 'GST 111'];
     for (const s of allSessions) {
       if (mgmt100.some((c) => s.courseCode.toUpperCase().includes(c))) {
-        matches.add(s.courseCode);
+        matches.add(getRootCourseCode(s.courseCode));
       }
     }
   }
@@ -590,10 +631,13 @@ export function getDepartmentSuggestedCourses(
     const general100 = ['MTS 101', 'MTS 105', 'CHM 101', 'BIO 101', 'PHS 101', 'GNS 111', 'GST 111'];
     for (const s of allSessions) {
       if (general100.some((g) => s.courseCode.toUpperCase().includes(g))) {
-        matches.add(s.courseCode);
+        matches.add(getRootCourseCode(s.courseCode));
       }
     }
   }
+
+  // Always include official University Sports period for all undergraduates
+  matches.add('SPORTS');
 
   return Array.from(matches);
 }

@@ -18,8 +18,9 @@ import {
   AlertTriangle,
   ChevronRight,
   Clock,
-  Sparkles,
   Trophy,
+  Compass,
+  ExternalLink,
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -31,6 +32,7 @@ interface HomePageProps {
   onSelectVenue: (name: string) => void;
   onOpenAddPersonalEvent: (day?: TimetableDay, time?: string) => void;
   onOpenShareModal: () => void;
+  onSyncDepartmentCurriculum?: () => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
@@ -42,6 +44,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   onSelectVenue,
   onOpenAddPersonalEvent,
   onOpenShareModal,
+  onSyncDepartmentCurriculum,
 }) => {
   // Accurately synchronize with West Africa Time (WAT)
   const [campusTime, setCampusTime] = useState(getCampusNow());
@@ -68,8 +71,14 @@ export const HomePage: React.FC<HomePageProps> = ({
     greetingTime = 'Good evening';
   }
 
-  const greeting = userProfile.preferredName
-    ? `${greetingTime}, ${userProfile.preferredName}.`
+  // Clean raw preferred name from leading/trailing dashes, underscores, or weird punctuation
+  const cleanName = (userProfile.preferredName || '')
+    .replace(/^[-_—\s]+/, '')
+    .replace(/[-_—\s]+$/, '')
+    .trim();
+
+  const greeting = cleanName
+    ? `${greetingTime}, ${cleanName}.`
     : `${greetingTime}.`;
 
   // Free time calculation for active day
@@ -79,12 +88,6 @@ export const HomePage: React.FC<HomePageProps> = ({
   // Clash detection
   const clashes = detectClashes(activeSessions, personalEvents);
   const todayClashes = clashes.filter((c) => c.day === activeDay);
-
-  // Monday preview for weekend
-  const mondaySessions = activeSessions
-    .filter((s) => s.day === 'Monday')
-    .sort((a, b) => (a.startTime > b.startTime ? 1 : -1));
-  const firstMondayClass = mondaySessions[0];
 
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-200">
@@ -119,22 +122,23 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </div>
 
-      {/* Weekend Prep Banner (If Saturday or Sunday) */}
-      {!campusTime.isAcademicDay && (
-        <div className="p-4 sm:p-5 rounded-2xl bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 space-y-2">
-          <div className="flex items-center gap-2 text-indigo-950 dark:text-indigo-200 font-bold text-sm">
-            <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-            <span>Weekend Mode • Next Lecture: Monday Morning</span>
+      {/* Curriculum Auto-Enroll Notice for under-enrolled students */}
+      {activeSessions.length <= 2 && userProfile.departmentId && onSyncDepartmentCurriculum && (
+        <div className="p-4 rounded-2xl border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/70 dark:bg-indigo-950/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5 text-xs shadow-2xs">
+          <div className="space-y-0.5">
+            <div className="font-bold text-indigo-950 dark:text-indigo-200">
+              Only {activeSessions.length} registered {activeSessions.length === 1 ? 'class' : 'classes'} on your schedule
+            </div>
+            <p className="text-[11px] text-indigo-800/80 dark:text-indigo-300/80 leading-relaxed">
+              At FUNAAB, {userProfile.level}L {userProfile.departmentId} takes shared cross-cutting faculty courses (Mathematics, Physics, Chemistry, Biology, Computing, GNS, and Sports).
+            </p>
           </div>
-          <p className="text-xs text-indigo-800/80 dark:text-indigo-300/80">
-            {firstMondayClass ? (
-              <>
-                Your first class of the week is <strong>{firstMondayClass.courseCode}</strong> at <strong>{firstMondayClass.startTime}</strong> in <strong>{firstMondayClass.venue}</strong>.
-              </>
-            ) : (
-              'You have no classes scheduled for Monday. Take time to study or prepare your week ahead.'
-            )}
-          </p>
+          <button
+            onClick={onSyncDepartmentCurriculum}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition-colors shrink-0 shadow-xs whitespace-nowrap"
+          >
+            <span>Enroll Full {userProfile.level}L Curriculum</span>
+          </button>
         </div>
       )}
 
@@ -168,6 +172,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         sessions={activeSessions}
         onSelectCourse={onSelectCourse}
         onSelectVenue={onSelectVenue}
+        onSelectDay={(day) => setActiveDay(day)}
       />
 
       {/* Free-Time Insight Snippet */}
@@ -237,6 +242,36 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="text-[11px] text-slate-500">Study / meeting</div>
         </button>
       </div>
+
+      {/* FUNAAB 101 Campus Guide Resource */}
+      <a
+        href="https://funaab101.xyz"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="p-3.5 sm:p-4 rounded-2xl border border-indigo-200/80 dark:border-indigo-900/60 bg-gradient-to-r from-indigo-50/70 via-white to-purple-50/60 dark:from-indigo-950/30 dark:via-slate-900 dark:to-purple-950/20 flex items-center justify-between gap-3 shadow-2xs hover:border-indigo-300 dark:hover:border-indigo-700 transition-all group"
+      >
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="p-2.5 rounded-xl bg-indigo-600 text-white shadow-xs group-hover:scale-105 transition-transform shrink-0">
+            <Compass className="w-4 h-4" />
+          </div>
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-xs font-bold text-slate-900 dark:text-white">FUNAAB 101 Campus Guide</span>
+              <span className="text-[10px] font-semibold uppercase px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300">
+                funaab101.xyz
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+              Know your school better: campus navigation, hostel guides, landmarks, survival tips & student secrets.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 shrink-0 group-hover:translate-x-0.5 transition-transform">
+          <span className="hidden sm:inline">Explore</span>
+          <ExternalLink className="w-3.5 h-3.5" />
+        </div>
+      </a>
 
       {/* Interactive Day Switcher Tabs */}
       <div className="space-y-3 pt-2">

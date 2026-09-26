@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { OFFICIAL_METADATA } from '../data/timetable';
-import { X, Send, MessageSquareText, ShieldAlert, Sparkles, AlertCircle } from 'lucide-react';
+import { X, Send, MessageSquareText, ShieldAlert, Lightbulb, AlertCircle, FileText } from 'lucide-react';
 
 interface FeedbackModalProps {
   initialContext?: {
@@ -25,25 +25,35 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   const [message, setMessage] = useState('');
 
   const categoryLabels = {
-    incorrect_info: 'Report incorrect timetable information',
-    feature: 'Suggest a feature',
-    bug: 'Report a problem or glitch',
-    other: 'General feedback',
+    incorrect_info: 'Incorrect Timetable Information',
+    feature: 'Feature Proposal / Idea',
+    bug: 'Technical Glitch / Bug',
+    other: 'General Inquiry / Feedback',
   };
 
   const handleSendWhatsApp = () => {
-    let fullText = `*Class Ease Feedback / Timetable Report*\n`;
-    fullText += `Type: ${categoryLabels[category]}\n`;
-    fullText += `Timetable Version: ${OFFICIAL_METADATA.academicYear} ${OFFICIAL_METADATA.semester} v${OFFICIAL_METADATA.timetableVersion}\n`;
+    const studentDept = initialContext?.courseCode ? '' : '';
+    const divider = '━━━━━━━━━━━━━━━━━━━━━━';
+    const lines = [
+      `*🏛️ FUNAAB CLASS EASE • VERIFICATION & FEEDBACK*`,
+      divider,
+      `*📌 CATEGORY:* ${categoryLabels[category]}`,
+      `*📅 TIMETABLE:* ${OFFICIAL_METADATA.academicYear} • ${OFFICIAL_METADATA.semester} (v${OFFICIAL_METADATA.timetableVersion})`,
+    ];
 
-    if (courseCode) fullText += `Course: ${courseCode}\n`;
-    if (venue) fullText += `Venue: ${venue}\n`;
-    if (day) fullText += `Day: ${day}\n`;
+    if (courseCode) lines.push(`*📖 COURSE:* ${courseCode.toUpperCase()}`);
+    if (venue) lines.push(`*📍 VENUE:* ${venue.toUpperCase()}`);
+    if (day) lines.push(`*🗓️ DAY:* ${day}`);
 
-    fullText += `\n*Message:*\n${message || 'No additional comment'}\n`;
-    fullText += `\n_Sent from Class Ease App_`;
+    lines.push(divider);
+    lines.push(`*📝 REPORT DETAILS:*`);
+    lines.push(message.trim() || 'No additional note provided.');
+    lines.push(divider);
+    lines.push(`_Submitted via Class Ease Student App_`);
 
-    // Format for Nigeria +234
+    const fullText = lines.join('\n');
+
+    // Official FUNAAB Class Ease maintainer desk (+2348128197651)
     const phone = '2348128197651';
     const encoded = encodeURIComponent(fullText);
     const url = `https://wa.me/${phone}?text=${encoded}`;
@@ -87,7 +97,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
             <div className="grid grid-cols-2 gap-2">
               {[
                 { id: 'incorrect_info', label: 'Incorrect Info', icon: ShieldAlert },
-                { id: 'feature', label: 'Suggest Feature', icon: Sparkles },
+                { id: 'feature', label: 'Suggest Feature', icon: Lightbulb },
                 { id: 'bug', label: 'Report Problem', icon: AlertCircle },
                 { id: 'other', label: 'Something Else', icon: MessageSquareText },
               ].map((c) => {
@@ -149,12 +159,31 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
               Tell us what happened *
             </label>
             <textarea
-              rows={4}
+              rows={3}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Describe the discrepancy, new venue, or suggestion..."
               className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
+          </div>
+
+          {/* Formatted Message Preview */}
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+              <FileText className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span>WhatsApp Message Preview (Pre-formatted & Orderly)</span>
+            </div>
+            <div className="p-3 rounded-xl bg-slate-900 text-emerald-300 font-mono text-[11px] leading-relaxed border border-slate-800 select-none overflow-x-auto whitespace-pre-wrap">
+{`*🏛️ FUNAAB CLASS EASE • VERIFICATION & FEEDBACK*
+━━━━━━━━━━━━━━━━━━━━━━
+*📌 CATEGORY:* ${categoryLabels[category]}
+*📅 TIMETABLE:* ${OFFICIAL_METADATA.academicYear} • ${OFFICIAL_METADATA.semester} (v${OFFICIAL_METADATA.timetableVersion})${courseCode ? `\n*📖 COURSE:* ${courseCode.toUpperCase()}` : ''}${venue ? `\n*📍 VENUE:* ${venue.toUpperCase()}` : ''}${day ? `\n*🗓️ DAY:* ${day}` : ''}
+━━━━━━━━━━━━━━━━━━━━━━
+*📝 REPORT DETAILS:*
+${message.trim() || '(Type your report above to preview)'}
+━━━━━━━━━━━━━━━━━━━━━━
+_Submitted via Class Ease Student App_`}
+            </div>
           </div>
 
           <div className="text-[11px] text-slate-400 dark:text-slate-500">

@@ -70,6 +70,7 @@ export const OFFICIAL_METADATA = {
   timetableVersion: '2.0',
   committee: 'Time Table and Examination Committee (TIMTEC)',
   directionServiceUrl: 'https://funaab.getdirection.xyz',
+  campusGuideUrl: 'https://funaab101.xyz',
   whatsappSupportNumber: '08128197651',
   timtecContacts: [
     { role: 'Chairman TIMTEC', phone: '08034189016' },
@@ -483,7 +484,8 @@ export const VERIFIED_COURSE_TITLES: Record<string, string> = {
   "ABE 201": "Introduction to Agricultural Engineering",
   "CVE 201": "Engineer in Society",
   "ELE 201": "Applied Electricity I",
-  "MCE 201": "Engineering Mechanics I"
+  "MCE 201": "Engineering Mechanics I",
+  "SPORTS": "Official University Sports & Inter-Hall Games"
 };
 
 export const OFFICIAL_VENUES: VenueDirectoryItem[] = [
@@ -942,6 +944,12 @@ export const OFFICIAL_VENUES: VenueDirectoryItem[] = [
     "building": "Veterinary Teaching Hospital",
     "capacity": 100,
     "type": "Clinical Facility"
+  },
+  {
+    "name": "SPORTS COMPLEX",
+    "building": "FUNAAB University Stadium & Sports Complex",
+    "capacity": 3000,
+    "type": "Sports Facility"
   }
 ];
 
@@ -24320,6 +24328,40 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "timetableVersion": "2.0",
     "source": "TIMTEC official timetable PDF",
     "verificationStatus": "Official Verified"
+  },
+  {
+    "id": "sports-wednesday-session-1",
+    "day": "Wednesday",
+    "startTime": "02:00 PM",
+    "endTime": "04:00 PM",
+    "courseCode": "SPORTS",
+    "venue": "SPORTS COMPLEX",
+    "level": "All",
+    "prefix": "SPORTS",
+    "isPractical": false,
+    "isVirtual": false,
+    "academicYear": "2026/2027",
+    "semester": "First Semester",
+    "timetableVersion": "2.0",
+    "source": "Official TIMTEC v2.0 Page 2-3",
+    "verificationStatus": "Official Master Timetable"
+  },
+  {
+    "id": "sports-wednesday-session-2",
+    "day": "Wednesday",
+    "startTime": "04:00 PM",
+    "endTime": "06:00 PM",
+    "courseCode": "SPORTS",
+    "venue": "SPORTS COMPLEX",
+    "level": "All",
+    "prefix": "SPORTS",
+    "isPractical": false,
+    "isVirtual": false,
+    "academicYear": "2026/2027",
+    "semester": "First Semester",
+    "timetableVersion": "2.0",
+    "source": "Official TIMTEC v2.0 Page 2-3",
+    "verificationStatus": "Official Master Timetable"
   }
 ];
 

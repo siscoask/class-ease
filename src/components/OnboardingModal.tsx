@@ -28,9 +28,9 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   const departments = selectedCollege ? selectedCollege.departments : [];
   const currentDeptCode = departmentId || (departments[0]?.code ?? 'CSC');
 
-  // When reaching Course selection step, pre-populate if empty
+  // When department or level changes, update recommended courses automatically
   useEffect(() => {
-    if (selectedCourses.length === 0 && currentDeptCode) {
+    if (currentDeptCode) {
       const suggested = getDepartmentSuggestedCourses(currentDeptCode, level, TIMETABLE_SESSIONS);
       if (suggested.length > 0) {
         setSelectedCourses(suggested);
@@ -74,13 +74,23 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
         practicalMap['PCP 191'] = practicalDay;
       }
 
+      const cleanName = name
+        .replace(/^[-_—\s]+/, '')
+        .replace(/[-_—\s]+$/, '')
+        .trim();
+
+      let finalCourses = selectedCourses;
+      if (finalCourses.length === 0 || (finalCourses.length === 1 && finalCourses[0].startsWith(currentDeptCode))) {
+        finalCourses = getDepartmentSuggestedCourses(currentDeptCode, level, TIMETABLE_SESSIONS);
+      }
+
       onComplete({
         ...initialProfile,
-        preferredName: name.trim(),
+        preferredName: cleanName,
         collegeId: selectedCollege?.id || '',
         departmentId: currentDeptCode,
         level,
-        selectedCourseCodes: selectedCourses,
+        selectedCourseCodes: finalCourses,
         practicalDayPreferences: practicalMap,
         preferredView: view,
         onboardingCompleted: true,

@@ -11,8 +11,11 @@ import {
   Moon,
   Sun,
   ShieldCheck,
-  Sparkles,
   Info,
+  BookOpen,
+  X,
+  RefreshCw,
+  Plus,
 } from 'lucide-react';
 
 interface SettingsPageProps {
@@ -21,6 +24,7 @@ interface SettingsPageProps {
   onResetAllData: () => void;
   onToggleDarkMode: () => void;
   onOpenFeedback: () => void;
+  onSyncDepartmentCurriculum?: () => void;
 }
 
 export const SettingsPage: React.FC<SettingsPageProps> = ({
@@ -29,6 +33,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
   onResetAllData,
   onToggleDarkMode,
   onOpenFeedback,
+  onSyncDepartmentCurriculum,
 }) => {
   const [name, setName] = useState(userProfile.preferredName);
   const [collegeId, setCollegeId] = useState(userProfile.collegeId || VERIFIED_COLLEGES[0].id);
@@ -206,6 +211,58 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
         </div>
       </div>
 
+      {/* Course Enrollment & Department Curriculum */}
+      <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+          <div>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <span>Registered Courses & Curriculum</span>
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              {(userProfile.selectedCourseCodes || []).length} registered course{(userProfile.selectedCourseCodes || []).length === 1 ? '' : 's'} active on your schedule for {userProfile.level}L {userProfile.departmentId}.
+            </p>
+          </div>
+
+          {onSyncDepartmentCurriculum && (
+            <button
+              onClick={onSyncDepartmentCurriculum}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-xs font-semibold transition-colors border border-indigo-200 dark:border-indigo-800 shrink-0 shadow-2xs"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Enroll Full Recommended Basket</span>
+            </button>
+          )}
+        </div>
+
+        {/* Registered Course Chips */}
+        <div className="flex flex-wrap gap-2">
+          {(userProfile.selectedCourseCodes || []).length === 0 ? (
+            <p className="text-xs text-slate-400 italic">No courses selected. Tap the button above to enroll your full department curriculum.</p>
+          ) : (
+            (userProfile.selectedCourseCodes || []).map((code) => (
+              <span
+                key={code}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-mono font-medium shadow-2xs"
+              >
+                <span>{code}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const updated = (userProfile.selectedCourseCodes || []).filter((c) => c !== code);
+                    onUpdateProfile({ ...userProfile, selectedCourseCodes: updated });
+                  }}
+                  className="text-slate-400 hover:text-rose-600 transition-colors"
+                  title={`Remove ${code}`}
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            ))
+          )}
+        </div>
+      </div>
+
       {/* 2. Official Timetable Provenance Card */}
       <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs space-y-3">
         <div className="flex items-center gap-2">
@@ -231,6 +288,34 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           <div className="flex items-center justify-between font-mono">
             <span className="text-slate-500">Authority</span>
             <span className="font-bold text-slate-900 dark:text-white">{OFFICIAL_METADATA.committee}</span>
+          </div>
+        </div>
+
+        {/* Campus Web Services */}
+        <div className="pt-2 text-xs border-t border-slate-100 dark:border-slate-800 space-y-1.5">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block">
+            Campus Ecosystem & Utilities:
+          </span>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+            <a
+              href="https://funaab101.xyz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold hover:border-indigo-400 transition-colors"
+            >
+              <span>FUNAAB 101 Guide</span>
+              <ExternalLink className="w-3 h-3 text-slate-400" />
+            </a>
+
+            <a
+              href={OFFICIAL_METADATA.directionServiceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold hover:border-indigo-400 transition-colors"
+            >
+              <span>GetDirection Service</span>
+              <ExternalLink className="w-3 h-3 text-slate-400" />
+            </a>
           </div>
         </div>
 

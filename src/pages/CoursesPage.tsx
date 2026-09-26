@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { COURSE_CATALOG, VERIFIED_COURSE_TITLES } from '../data/timetable';
-import { matchCourseSearch } from '../utils/scheduleLogic';
+import { matchCourseSearch, isSessionMatchingCourse } from '../utils/scheduleLogic';
 import { Search, Plus, Check, BookOpen, Layers } from 'lucide-react';
 
 interface CoursesPageProps {
@@ -45,7 +45,7 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
       return false;
     }
     // Enrolled
-    if (onlyEnrolled && !selectedCourseCodes.includes(c.code)) {
+    if (onlyEnrolled && !selectedCourseCodes.some((code) => isSessionMatchingCourse(c.code, code))) {
       return false;
     }
     return true;
@@ -180,7 +180,9 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {filteredCourses.slice(0, 150).map((course) => {
-            const isEnrolled = selectedCourseCodes.includes(course.code);
+            const isEnrolled = selectedCourseCodes.some((code) =>
+              isSessionMatchingCourse(course.code, code)
+            );
             return (
               <div
                 key={course.code}
