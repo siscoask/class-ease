@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="streamGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#4f46e5" />
+    </linearGradient>
+    <linearGradient id="streamGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a5b4fc" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+    <linearGradient id="streamGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c7d2fe" />
+      <stop offset="100%" stop-color="#818cf8" />
+    </linearGradient>
+    <linearGradient id="vectorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa" />
+      <stop offset="50%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#4338ca" />
+    </linearGradient>
+    <filter id="subtleGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#4f46e5" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Deep indigo neutral squircle container with safe padding -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+
+  <g transform="translate(64, 64) scale(0.75)" filter="url(#subtleGlow)">
+    <!-- Rhythmic convergent stream 1 (Top entry) -->
+    <path
+      d="M 60 140 C 130 140, 190 190, 240 230 C 265 250, 290 256, 330 256"
+      fill="none"
+      stroke="url(#streamGrad1)"
+      stroke-width="36"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Rhythmic convergent stream 2 (Center baseline) -->
+    <path
+      d="M 60 256 C 140 256, 210 256, 270 256 C 300 256, 320 256, 340 256"
+      fill="none"
+      stroke="url(#streamGrad2)"
+      stroke-width="36"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-opacity="0.9"
+    />
+
+    <!-- Rhythmic convergent stream 3 (Bottom entry) -->
+    <path
+      d="M 60 372 C 130 372, 190 322, 240 282 C 265 262, 290 256, 330 256"
+      fill="none"
+      stroke="url(#streamGrad3)"
+      stroke-width="36"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- The Singular Forward Clarity Vector (Turning complexity into clear direction) -->
+    <path
+      d="M 320 176 L 416 256 L 320 336 L 356 256 Z"
+      fill="url(#vectorGrad)"
+      stroke="#ffffff"
+      stroke-width="8"
+      stroke-linejoin="round"
+    />
+
+    <!-- Focal Nexus Orb -->
+    <circle cx="280" cy="256" r="16" fill="#38bdf8" />
+  </g>
+</svg>
