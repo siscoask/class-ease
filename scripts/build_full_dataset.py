@@ -401,7 +401,7 @@ def split_course_and_venue(entry):
         "RC 101", "RC 102", "RC 202", "RC 203", "RC 205", "RC 206", "R 205", "R 206",
         "A 101/VIRTUAL", "A 101", "A 105", "A 110", "A 201", "A 203", "A 215",
         "AC 101", "LIS LR", "CPL/VIRTUAL", "CPL", "SSLM LR", "PPCP LR", "PBST LR", "HRT LR", "CPT LR",
-        "PHS LABS", "CHM LABS", "BIO LABS/AGRIC LAB II", "BIO LABS",
+        "ABE LAB", "MCB LAB", "HRT LAB", "PBST LAB", "CPT LAB", "PHS LABS", "CHM LABS", "BIO LABS/AGRIC LAB II", "BIO LABS",
         "PHS LAB I", "PHS LAB II", "PHS LAB", "CHM LAB", "NEW CHM LAB", "OLD CHM LAB", "TETFUND CHM LAB",
         "BIO LAB", "BIO-M", "PAB LAB", "PAZ LAB", "ZOO LAB", "TETFUND BIO LAB", "TETFUND LAB",
         "AGRIC LAB 1/AGRIC LAB II", "AGRIC LAB I/VIRTUAL", "AGRIC LAB 2//VIRTUAL", "AGRIC LABS I,II",
@@ -409,7 +409,7 @@ def split_course_and_venue(entry):
         "ANN LAB/COLANIM FARM", "ANN LAB", "APH LAB", "ANP LAB", "BCH LAB", "EMT LAB I", "EMT LAB II", "EMT LAB",
         "ELE LAB I", "ELE LAB II", "ELE LAB", "MCE LAB I", "MCE LAB II", "MCE LAB", "MTE LAB", "NEW ENGR LAB",
         "SOS LAB", "STS LAB", "500 COMP LAB", "500 COMPLAB", "500COMPLAB", "CSC LAB",
-        "CLOTHING LAB", "TEXTILE LAB", "PATTERN DRAFTING LAB", "HSM LAB", "HSM EXT LAB",
+        "CLOTHING LAB", "TEXTILE LAB", "PATTERN DRAFTING LAB", "HSM LAB", "HTM LAB", "HSM EXT LAB",
         "FST LAB II", "FST LAB", "FIS LAB 1", "FIS LAB 2", "FIS LAB", "FRM LAB", "FWM LAB",
         "WOOD LAB", "WATER LAB", "WMA LAB", "WRM LAB", "NUD LAB", "NTD LAB", "PPCP LAB", "PBS LAB",
         "CEASEDE PHS LAB", "ICGNS LR", "FIELD/CPL PHASE II LAB", "FIELD"
@@ -435,7 +435,7 @@ def split_course_and_venue(entry):
         if len(tokens) >= 2:
             # Let's guess the course is token 0 or 0..1
             # Usually course code is like "MTS 101" or "BIO 107"
-            if len(tokens) >= 3 and tokens[1].isdigit():
+            if len(tokens) >= 3 and (tokens[1].isdigit() or re.match(r'^\d{3}', tokens[1])):
                 course = f"{tokens[0]} {tokens[1]}"
                 venue = " ".join(tokens[2:])
             else:

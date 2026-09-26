@@ -10,6 +10,7 @@ import {
   Coffee,
   CalendarPlus,
   Settings,
+  MessageSquare,
 } from 'lucide-react';
 import { OFFICIAL_METADATA } from '../data/timetable';
 
@@ -18,6 +19,7 @@ interface HeaderProps {
   onSelectTab: (tab: string) => void;
   darkMode: boolean;
   onToggleDarkMode: () => void;
+  onOpenFeedback?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -25,6 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectTab,
   darkMode,
   onToggleDarkMode,
+  onOpenFeedback,
 }) => {
   const [moreOpen, setMoreOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
@@ -157,8 +160,19 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </nav>
 
-        {/* Right Action Icons (PWA & Dark Mode) */}
+        {/* Right Action Icons (Feedback, PWA & Dark Mode) */}
         <div className="flex items-center gap-2 shrink-0">
+          {onOpenFeedback && (
+            <button
+              onClick={onOpenFeedback}
+              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-indigo-200 dark:border-indigo-800/80 bg-indigo-50/70 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-xs font-semibold transition-colors"
+              title="Submit timetable verification or feedback"
+            >
+              <MessageSquare className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+              <span>Feedback</span>
+            </button>
+          )}
+
           <PWAInstallButton />
 
           <button

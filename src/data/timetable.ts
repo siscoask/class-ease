@@ -959,9 +959,9 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Monday",
     "startTime": "09:00 AM",
     "endTime": "11:00 AM",
-    "courseCode": "ABE",
-    "venue": "301(P) ABE LAB",
-    "level": "Unspecified",
+    "courseCode": "ABE 301(P)",
+    "venue": "ABE LAB",
+    "level": "300",
     "prefix": "ABE",
     "isPractical": true,
     "isVirtual": false,
@@ -1095,8 +1095,8 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Thursday",
     "startTime": "09:00 AM",
     "endTime": "11:00 AM",
-    "courseCode": "ABE 401",
-    "venue": "(P) NEW ABE LAB",
+    "courseCode": "ABE 401 (P) NEW",
+    "venue": "ABE LAB",
     "level": "400",
     "prefix": "ABE",
     "isPractical": true,
@@ -1146,8 +1146,8 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Tuesday",
     "startTime": "09:00 AM",
     "endTime": "11:00 AM",
-    "courseCode": "ABE 321",
-    "venue": "(P) ABE LAB",
+    "courseCode": "ABE 321 (P)",
+    "venue": "ABE LAB",
     "level": "300",
     "prefix": "ABE",
     "isPractical": true,
@@ -2795,8 +2795,8 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Thursday",
     "startTime": "09:00 AM",
     "endTime": "11:00 AM",
-    "courseCode": "CPT 509",
-    "venue": "(P) CPT LAB",
+    "courseCode": "CPT 509 (P)",
+    "venue": "CPT LAB",
     "level": "500",
     "prefix": "CPT",
     "isPractical": true,
@@ -5702,8 +5702,8 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Friday",
     "startTime": "09:00 AM",
     "endTime": "11:00 AM",
-    "courseCode": "MCB 305",
-    "venue": "(P) MCB LAB",
+    "courseCode": "MCB 305 (P)",
+    "venue": "MCB LAB",
     "level": "300",
     "prefix": "MCB",
     "isPractical": true,
@@ -5719,8 +5719,8 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Monday",
     "startTime": "09:00 AM",
     "endTime": "11:00 AM",
-    "courseCode": "MCB 403",
-    "venue": "(P) MCB LAB",
+    "courseCode": "MCB 403 (P)",
+    "venue": "MCB LAB",
     "level": "400",
     "prefix": "MCB",
     "isPractical": true,
@@ -5736,8 +5736,8 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Tuesday",
     "startTime": "09:00 AM",
     "endTime": "11:00 AM",
-    "courseCode": "HRT 509",
-    "venue": "(P) HRT LAB",
+    "courseCode": "HRT 509 (P)",
+    "venue": "HRT LAB",
     "level": "500",
     "prefix": "HRT",
     "isPractical": true,
@@ -6093,9 +6093,9 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Wednesday",
     "startTime": "09:00 AM",
     "endTime": "11:00 AM",
-    "courseCode": "MCB",
-    "venue": "201(P) MCB LAB",
-    "level": "Unspecified",
+    "courseCode": "MCB 201(P)",
+    "venue": "MCB LAB",
+    "level": "200",
     "prefix": "MCB",
     "isPractical": true,
     "isVirtual": false,
@@ -6280,8 +6280,8 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Thursday",
     "startTime": "09:00 AM",
     "endTime": "11:00 AM",
-    "courseCode": "MCB 303",
-    "venue": "(P) MCB LAB",
+    "courseCode": "MCB 303 (P)",
+    "venue": "MCB LAB",
     "level": "300",
     "prefix": "MCB",
     "isPractical": true,
@@ -8405,9 +8405,9 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Thursday",
     "startTime": "11:00 AM",
     "endTime": "01:00 PM",
-    "courseCode": "ABE",
-    "venue": "405(P) ABE LAB",
-    "level": "Unspecified",
+    "courseCode": "ABE 405(P)",
+    "venue": "ABE LAB",
+    "level": "400",
     "prefix": "ABE",
     "isPractical": true,
     "isVirtual": false,
@@ -8881,8 +8881,8 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Tuesday",
     "startTime": "11:00 AM",
     "endTime": "01:00 PM",
-    "courseCode": "ABE 303",
-    "venue": "(P) ABE LAB",
+    "courseCode": "ABE 303 (P)",
+    "venue": "ABE LAB",
     "level": "300",
     "prefix": "ABE",
     "isPractical": true,
@@ -9918,8 +9918,8 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Wednesday",
     "startTime": "11:00 AM",
     "endTime": "01:00 PM",
-    "courseCode": "CPT 515",
-    "venue": "(P) CPT LAB",
+    "courseCode": "CPT 515 (P)",
+    "venue": "CPT LAB",
     "level": "500",
     "prefix": "CPT",
     "isPractical": true,
@@ -12281,9 +12281,9 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Tuesday",
     "startTime": "11:00 AM",
     "endTime": "01:00 PM",
-    "courseCode": "HRT",
-    "venue": "501(P) HRT LAB",
-    "level": "Unspecified",
+    "courseCode": "HRT 501(P)",
+    "venue": "HRT LAB",
+    "level": "500",
     "prefix": "HRT",
     "isPractical": true,
     "isVirtual": false,
@@ -12298,8 +12298,8 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Wednesday",
     "startTime": "11:00 AM",
     "endTime": "01:00 PM",
-    "courseCode": "HRT 507",
-    "venue": "(P) HRT LAB",
+    "courseCode": "HRT 507 (P)",
+    "venue": "HRT LAB",
     "level": "500",
     "prefix": "HRT",
     "isPractical": true,
@@ -12961,9 +12961,9 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Tuesday",
     "startTime": "11:00 AM",
     "endTime": "01:00 PM",
-    "courseCode": "MCB",
-    "venue": "401(P) MCB LAB",
-    "level": "Unspecified",
+    "courseCode": "MCB 401(P)",
+    "venue": "MCB LAB",
+    "level": "400",
     "prefix": "MCB",
     "isPractical": true,
     "isVirtual": false,
@@ -15188,9 +15188,9 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Thursday",
     "startTime": "02:00 PM",
     "endTime": "04:00 PM",
-    "courseCode": "ABE",
-    "venue": "407(P) ABE LAB",
-    "level": "Unspecified",
+    "courseCode": "ABE 407(P)",
+    "venue": "ABE LAB",
+    "level": "400",
     "prefix": "ABE",
     "isPractical": true,
     "isVirtual": false,
@@ -15239,9 +15239,9 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Wednesday",
     "startTime": "02:00 PM",
     "endTime": "04:00 PM",
-    "courseCode": "ABE",
-    "venue": "301(P) ABE LAB",
-    "level": "Unspecified",
+    "courseCode": "ABE 301(P)",
+    "venue": "ABE LAB",
+    "level": "300",
     "prefix": "ABE",
     "isPractical": true,
     "isVirtual": false,
@@ -15358,8 +15358,8 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Tuesday",
     "startTime": "02:00 PM",
     "endTime": "04:00 PM",
-    "courseCode": "ABE 517",
-    "venue": "(P) ABE LAB",
+    "courseCode": "ABE 517 (P)",
+    "venue": "ABE LAB",
     "level": "500",
     "prefix": "ABE",
     "isPractical": true,
@@ -16395,8 +16395,8 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Thursday",
     "startTime": "02:00 PM",
     "endTime": "04:00 PM",
-    "courseCode": "CPT 511",
-    "venue": "(P) CPT LAB",
+    "courseCode": "CPT 511 (P)",
+    "venue": "CPT LAB",
     "level": "500",
     "prefix": "CPT",
     "isPractical": true,
@@ -18044,9 +18044,9 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Friday",
     "startTime": "02:30 PM",
     "endTime": "04:30 PM",
-    "courseCode": "MCB",
-    "venue": "405(P) MCB LAB",
-    "level": "Unspecified",
+    "courseCode": "MCB 405(P)",
+    "venue": "MCB LAB",
+    "level": "400",
     "prefix": "MCB",
     "isPractical": true,
     "isVirtual": false,
@@ -18503,8 +18503,8 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Thursday",
     "startTime": "02:00 PM",
     "endTime": "04:00 PM",
-    "courseCode": "MCB 407",
-    "venue": "(P) MCB LAB",
+    "courseCode": "MCB 407 (P)",
+    "venue": "MCB LAB",
     "level": "400",
     "prefix": "MCB",
     "isPractical": true,
@@ -18741,9 +18741,9 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Monday",
     "startTime": "02:00 PM",
     "endTime": "04:00 PM",
-    "courseCode": "HRT",
-    "venue": "503(P) HRT LAB",
-    "level": "Unspecified",
+    "courseCode": "HRT 503(P)",
+    "venue": "HRT LAB",
+    "level": "500",
     "prefix": "HRT",
     "isPractical": true,
     "isVirtual": false,
@@ -19013,9 +19013,9 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Monday",
     "startTime": "02:00 PM",
     "endTime": "04:00 PM",
-    "courseCode": "HTM",
-    "venue": "201(P) HTM LAB",
-    "level": "Unspecified",
+    "courseCode": "HTM 201(P)",
+    "venue": "HTM LAB",
+    "level": "200",
     "prefix": "HTM",
     "isPractical": true,
     "isVirtual": false,
@@ -19829,9 +19829,9 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Monday",
     "startTime": "02:00 PM",
     "endTime": "04:00 PM",
-    "courseCode": "PBS",
-    "venue": "501(P) PBST LAB",
-    "level": "Unspecified",
+    "courseCode": "PBS 501(P)",
+    "venue": "PBST LAB",
+    "level": "500",
     "prefix": "PBS",
     "isPractical": true,
     "isVirtual": false,
@@ -21257,9 +21257,9 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Friday",
     "startTime": "04:30 PM",
     "endTime": "06:30 PM",
-    "courseCode": "CPT",
-    "venue": "503(P) CPT LAB",
-    "level": "Unspecified",
+    "courseCode": "CPT 503(P)",
+    "venue": "CPT LAB",
+    "level": "500",
     "prefix": "CPT",
     "isPractical": true,
     "isVirtual": false,
@@ -23365,9 +23365,9 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Friday",
     "startTime": "04:30 PM",
     "endTime": "06:30 PM",
-    "courseCode": "SOS",
-    "venue": "101/211 VET AUD/ACAD C1-C3/VIRTUAL",
-    "level": "Unspecified",
+    "courseCode": "SOS 101/211",
+    "venue": "VET AUD/ACAD C1-C3/VIRTUAL",
+    "level": "100",
     "prefix": "SOS",
     "isPractical": false,
     "isVirtual": true,
@@ -23467,9 +23467,9 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
     "day": "Tuesday",
     "startTime": "04:00 PM",
     "endTime": "06:00 PM",
-    "courseCode": "PHY",
-    "venue": "103/PHY 105 (C) PPCP LR/VIRTUAL",
-    "level": "Unspecified",
+    "courseCode": "PHY 103/PHY",
+    "venue": "105 (C) PPCP LR/VIRTUAL",
+    "level": "100",
     "prefix": "PHY",
     "isPractical": false,
     "isVirtual": true,
@@ -24367,8 +24367,8 @@ export const TIMETABLE_SESSIONS: TimetableSession[] = [
 
 export const COURSE_CATALOG: CourseCatalogItem[] = [
   {
-    "code": "ABE",
-    "level": "Unspecified",
+    "code": "ABE 301(P)",
+    "level": "300",
     "prefix": "ABE",
     "isPractical": true,
     "isVirtual": false,
@@ -24377,23 +24377,7 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Monday",
         "startTime": "09:00 AM",
         "endTime": "11:00 AM",
-        "venue": "301(P) ABE LAB",
-        "isPractical": true,
-        "isVirtual": false
-      },
-      {
-        "day": "Thursday",
-        "startTime": "11:00 AM",
-        "endTime": "01:00 PM",
-        "venue": "405(P) ABE LAB",
-        "isPractical": true,
-        "isVirtual": false
-      },
-      {
-        "day": "Thursday",
-        "startTime": "02:00 PM",
-        "endTime": "04:00 PM",
-        "venue": "407(P) ABE LAB",
+        "venue": "ABE LAB",
         "isPractical": true,
         "isVirtual": false
       },
@@ -24401,7 +24385,7 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Wednesday",
         "startTime": "02:00 PM",
         "endTime": "04:00 PM",
-        "venue": "301(P) ABE LAB",
+        "venue": "ABE LAB",
         "isPractical": true,
         "isVirtual": false
       }
@@ -24535,7 +24519,7 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
-    "code": "ABE 401",
+    "code": "ABE 401 (P) NEW",
     "level": "400",
     "prefix": "ABE",
     "isPractical": true,
@@ -24545,16 +24529,8 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Thursday",
         "startTime": "09:00 AM",
         "endTime": "11:00 AM",
-        "venue": "(P) NEW ABE LAB",
+        "venue": "ABE LAB",
         "isPractical": true,
-        "isVirtual": false
-      },
-      {
-        "day": "Tuesday",
-        "startTime": "02:00 PM",
-        "endTime": "04:00 PM",
-        "venue": "GLR 1",
-        "isPractical": false,
         "isVirtual": false
       }
     ]
@@ -24572,14 +24548,6 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "endTime": "11:00 AM",
         "venue": "GLR 1",
         "isPractical": false,
-        "isVirtual": false
-      },
-      {
-        "day": "Tuesday",
-        "startTime": "11:00 AM",
-        "endTime": "01:00 PM",
-        "venue": "(P) ABE LAB",
-        "isPractical": true,
         "isVirtual": false
       }
     ]
@@ -24602,7 +24570,7 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
-    "code": "ABE 321",
+    "code": "ABE 321 (P)",
     "level": "300",
     "prefix": "ABE",
     "isPractical": true,
@@ -24612,16 +24580,8 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Tuesday",
         "startTime": "09:00 AM",
         "endTime": "11:00 AM",
-        "venue": "(P) ABE LAB",
+        "venue": "ABE LAB",
         "isPractical": true,
-        "isVirtual": false
-      },
-      {
-        "day": "Tuesday",
-        "startTime": "02:00 PM",
-        "endTime": "04:00 PM",
-        "venue": "CPL",
-        "isPractical": false,
         "isVirtual": false
       }
     ]
@@ -26014,14 +25974,6 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "venue": "CPT LR",
         "isPractical": false,
         "isVirtual": false
-      },
-      {
-        "day": "Thursday",
-        "startTime": "02:00 PM",
-        "endTime": "04:00 PM",
-        "venue": "(P) CPT LAB",
-        "isPractical": true,
-        "isVirtual": false
       }
     ]
   },
@@ -26315,7 +26267,7 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
-    "code": "CPT 509",
+    "code": "CPT 509 (P)",
     "level": "500",
     "prefix": "CPT",
     "isPractical": true,
@@ -26325,16 +26277,8 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Thursday",
         "startTime": "09:00 AM",
         "endTime": "11:00 AM",
-        "venue": "(P) CPT LAB",
+        "venue": "CPT LAB",
         "isPractical": true,
-        "isVirtual": false
-      },
-      {
-        "day": "Wednesday",
-        "startTime": "09:00 AM",
-        "endTime": "11:00 AM",
-        "venue": "CPT LR",
-        "isPractical": false,
         "isVirtual": false
       }
     ]
@@ -26386,6 +26330,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "endTime": "11:00 AM",
         "venue": "CLOTHING LAB",
         "isPractical": true,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
+    "code": "CPT 509",
+    "level": "500",
+    "prefix": "CPT",
+    "isPractical": false,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Wednesday",
+        "startTime": "09:00 AM",
+        "endTime": "11:00 AM",
+        "venue": "CPT LR",
+        "isPractical": false,
         "isVirtual": false
       }
     ]
@@ -26539,14 +26500,6 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "endTime": "11:00 AM",
         "venue": "CPT LR",
         "isPractical": false,
-        "isVirtual": false
-      },
-      {
-        "day": "Wednesday",
-        "startTime": "11:00 AM",
-        "endTime": "01:00 PM",
-        "venue": "(P) CPT LAB",
-        "isPractical": true,
         "isVirtual": false
       }
     ]
@@ -28168,14 +28121,6 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "venue": "PISAD AUD",
         "isPractical": false,
         "isVirtual": false
-      },
-      {
-        "day": "Tuesday",
-        "startTime": "09:00 AM",
-        "endTime": "11:00 AM",
-        "venue": "(P) HRT LAB",
-        "isPractical": true,
-        "isVirtual": false
       }
     ]
   },
@@ -29026,14 +28971,6 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "venue": "PISAD AUD",
         "isPractical": false,
         "isVirtual": false
-      },
-      {
-        "day": "Wednesday",
-        "startTime": "11:00 AM",
-        "endTime": "01:00 PM",
-        "venue": "(P) HRT LAB",
-        "isPractical": true,
-        "isVirtual": false
       }
     ]
   },
@@ -29233,7 +29170,7 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
-    "code": "MCB 305",
+    "code": "MCB 305 (P)",
     "level": "300",
     "prefix": "MCB",
     "isPractical": true,
@@ -29243,22 +29180,14 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Friday",
         "startTime": "09:00 AM",
         "endTime": "11:00 AM",
-        "venue": "(P) MCB LAB",
+        "venue": "MCB LAB",
         "isPractical": true,
-        "isVirtual": false
-      },
-      {
-        "day": "Monday",
-        "startTime": "04:00 PM",
-        "endTime": "06:00 PM",
-        "venue": "A 101",
-        "isPractical": false,
         "isVirtual": false
       }
     ]
   },
   {
-    "code": "MCB 403",
+    "code": "MCB 403 (P)",
     "level": "400",
     "prefix": "MCB",
     "isPractical": true,
@@ -29268,16 +29197,25 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Monday",
         "startTime": "09:00 AM",
         "endTime": "11:00 AM",
-        "venue": "(P) MCB LAB",
+        "venue": "MCB LAB",
         "isPractical": true,
         "isVirtual": false
-      },
+      }
+    ]
+  },
+  {
+    "code": "HRT 509 (P)",
+    "level": "500",
+    "prefix": "HRT",
+    "isPractical": true,
+    "isVirtual": false,
+    "sessions": [
       {
         "day": "Tuesday",
         "startTime": "09:00 AM",
         "endTime": "11:00 AM",
-        "venue": "ACAD B5",
-        "isPractical": false,
+        "venue": "HRT LAB",
+        "isPractical": true,
         "isVirtual": false
       }
     ]
@@ -29663,8 +29601,8 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
-    "code": "MCB",
-    "level": "Unspecified",
+    "code": "MCB 201(P)",
+    "level": "200",
     "prefix": "MCB",
     "isPractical": true,
     "isVirtual": false,
@@ -29673,23 +29611,7 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Wednesday",
         "startTime": "09:00 AM",
         "endTime": "11:00 AM",
-        "venue": "201(P) MCB LAB",
-        "isPractical": true,
-        "isVirtual": false
-      },
-      {
-        "day": "Tuesday",
-        "startTime": "11:00 AM",
-        "endTime": "01:00 PM",
-        "venue": "401(P) MCB LAB",
-        "isPractical": true,
-        "isVirtual": false
-      },
-      {
-        "day": "Friday",
-        "startTime": "02:30 PM",
-        "endTime": "04:30 PM",
-        "venue": "405(P) MCB LAB",
+        "venue": "MCB LAB",
         "isPractical": true,
         "isVirtual": false
       }
@@ -29882,7 +29804,7 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
-    "code": "MCB 303",
+    "code": "MCB 303 (P)",
     "level": "300",
     "prefix": "MCB",
     "isPractical": true,
@@ -29892,16 +29814,8 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Thursday",
         "startTime": "09:00 AM",
         "endTime": "11:00 AM",
-        "venue": "(P) MCB LAB",
+        "venue": "MCB LAB",
         "isPractical": true,
-        "isVirtual": false
-      },
-      {
-        "day": "Tuesday",
-        "startTime": "09:00 AM",
-        "endTime": "11:00 AM",
-        "venue": "VET AUD",
-        "isPractical": false,
         "isVirtual": false
       }
     ]
@@ -30179,6 +30093,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
+    "code": "MCB 303",
+    "level": "300",
+    "prefix": "MCB",
+    "isPractical": false,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Tuesday",
+        "startTime": "09:00 AM",
+        "endTime": "11:00 AM",
+        "venue": "VET AUD",
+        "isPractical": false,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
     "code": "MCE 513",
     "level": "500",
     "prefix": "MCE",
@@ -30241,6 +30172,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "startTime": "09:00 AM",
         "endTime": "11:00 AM",
         "venue": "PPCP LR",
+        "isPractical": false,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
+    "code": "MCB 403",
+    "level": "400",
+    "prefix": "MCB",
+    "isPractical": false,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Tuesday",
+        "startTime": "09:00 AM",
+        "endTime": "11:00 AM",
+        "venue": "ACAD B5",
         "isPractical": false,
         "isVirtual": false
       }
@@ -32045,6 +31993,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
+    "code": "ABE 405(P)",
+    "level": "400",
+    "prefix": "ABE",
+    "isPractical": true,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Thursday",
+        "startTime": "11:00 AM",
+        "endTime": "01:00 PM",
+        "venue": "ABE LAB",
+        "isPractical": true,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
     "code": "ABE 527",
     "level": "500",
     "prefix": "ABE",
@@ -32091,14 +32056,6 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "endTime": "01:00 PM",
         "venue": "ABE LR",
         "isPractical": false,
-        "isVirtual": false
-      },
-      {
-        "day": "Tuesday",
-        "startTime": "02:00 PM",
-        "endTime": "04:00 PM",
-        "venue": "(P) ABE LAB",
-        "isPractical": true,
         "isVirtual": false
       }
     ]
@@ -32464,6 +32421,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "endTime": "01:00 PM",
         "venue": "ACAD A5",
         "isPractical": false,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
+    "code": "ABE 303 (P)",
+    "level": "300",
+    "prefix": "ABE",
+    "isPractical": true,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Tuesday",
+        "startTime": "11:00 AM",
+        "endTime": "01:00 PM",
+        "venue": "ABE LAB",
+        "isPractical": true,
         "isVirtual": false
       }
     ]
@@ -33466,6 +33440,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "endTime": "01:00 PM",
         "venue": "ANE II",
         "isPractical": false,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
+    "code": "CPT 515 (P)",
+    "level": "500",
+    "prefix": "CPT",
+    "isPractical": true,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Wednesday",
+        "startTime": "11:00 AM",
+        "endTime": "01:00 PM",
+        "venue": "CPT LAB",
+        "isPractical": true,
         "isVirtual": false
       }
     ]
@@ -35807,8 +35798,8 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
-    "code": "HRT",
-    "level": "Unspecified",
+    "code": "HRT 501(P)",
+    "level": "500",
     "prefix": "HRT",
     "isPractical": true,
     "isVirtual": false,
@@ -35817,15 +35808,24 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Tuesday",
         "startTime": "11:00 AM",
         "endTime": "01:00 PM",
-        "venue": "501(P) HRT LAB",
+        "venue": "HRT LAB",
         "isPractical": true,
         "isVirtual": false
-      },
+      }
+    ]
+  },
+  {
+    "code": "HRT 507 (P)",
+    "level": "500",
+    "prefix": "HRT",
+    "isPractical": true,
+    "isVirtual": false,
+    "sessions": [
       {
-        "day": "Monday",
-        "startTime": "02:00 PM",
-        "endTime": "04:00 PM",
-        "venue": "503(P) HRT LAB",
+        "day": "Wednesday",
+        "startTime": "11:00 AM",
+        "endTime": "01:00 PM",
+        "venue": "HRT LAB",
         "isPractical": true,
         "isVirtual": false
       }
@@ -36022,14 +36022,6 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "endTime": "04:00 PM",
         "venue": "CENTS AUD",
         "isPractical": false,
-        "isVirtual": false
-      },
-      {
-        "day": "Thursday",
-        "startTime": "02:00 PM",
-        "endTime": "04:00 PM",
-        "venue": "(P) MCB LAB",
-        "isPractical": true,
         "isVirtual": false
       }
     ]
@@ -36472,6 +36464,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "endTime": "01:00 PM",
         "venue": "HRT LR",
         "isPractical": false,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
+    "code": "MCB 401(P)",
+    "level": "400",
+    "prefix": "MCB",
+    "isPractical": true,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Tuesday",
+        "startTime": "11:00 AM",
+        "endTime": "01:00 PM",
+        "venue": "MCB LAB",
+        "isPractical": true,
         "isVirtual": false
       }
     ]
@@ -38372,6 +38381,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
+    "code": "ABE 321",
+    "level": "300",
+    "prefix": "ABE",
+    "isPractical": false,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Tuesday",
+        "startTime": "02:00 PM",
+        "endTime": "04:00 PM",
+        "venue": "CPL",
+        "isPractical": false,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
     "code": "ABE 223",
     "level": "200",
     "prefix": "ABE",
@@ -38389,6 +38415,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
+    "code": "ABE 407(P)",
+    "level": "400",
+    "prefix": "ABE",
+    "isPractical": true,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Thursday",
+        "startTime": "02:00 PM",
+        "endTime": "04:00 PM",
+        "venue": "ABE LAB",
+        "isPractical": true,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
     "code": "ABE 513",
     "level": "500",
     "prefix": "ABE",
@@ -38400,6 +38443,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "startTime": "02:00 PM",
         "endTime": "04:00 PM",
         "venue": "GLR III",
+        "isPractical": false,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
+    "code": "ABE 401",
+    "level": "400",
+    "prefix": "ABE",
+    "isPractical": false,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Tuesday",
+        "startTime": "02:00 PM",
+        "endTime": "04:00 PM",
+        "venue": "GLR 1",
         "isPractical": false,
         "isVirtual": false
       }
@@ -38511,6 +38571,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "endTime": "04:00 PM",
         "venue": "VET AUD",
         "isPractical": false,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
+    "code": "ABE 517 (P)",
+    "level": "500",
+    "prefix": "ABE",
+    "isPractical": true,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Tuesday",
+        "startTime": "02:00 PM",
+        "endTime": "04:00 PM",
+        "venue": "ABE LAB",
+        "isPractical": true,
         "isVirtual": false
       }
     ]
@@ -39538,6 +39615,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "endTime": "04:00 PM",
         "venue": "ACAD A5",
         "isPractical": false,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
+    "code": "CPT 511 (P)",
+    "level": "500",
+    "prefix": "CPT",
+    "isPractical": true,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Thursday",
+        "startTime": "02:00 PM",
+        "endTime": "04:00 PM",
+        "venue": "CPT LAB",
+        "isPractical": true,
         "isVirtual": false
       }
     ]
@@ -41073,6 +41167,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
+    "code": "MCB 405(P)",
+    "level": "400",
+    "prefix": "MCB",
+    "isPractical": true,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Friday",
+        "startTime": "02:30 PM",
+        "endTime": "04:30 PM",
+        "venue": "MCB LAB",
+        "isPractical": true,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
     "code": "FIS 407",
     "level": "400",
     "prefix": "FIS",
@@ -41447,6 +41558,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
+    "code": "MCB 407 (P)",
+    "level": "400",
+    "prefix": "MCB",
+    "isPractical": true,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Thursday",
+        "startTime": "02:00 PM",
+        "endTime": "04:00 PM",
+        "venue": "MCB LAB",
+        "isPractical": true,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
     "code": "GLY 409",
     "level": "400",
     "prefix": "GLY",
@@ -41629,6 +41757,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "endTime": "04:30 PM",
         "venue": "CAD",
         "isPractical": false,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
+    "code": "HRT 503(P)",
+    "level": "500",
+    "prefix": "HRT",
+    "isPractical": true,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Monday",
+        "startTime": "02:00 PM",
+        "endTime": "04:00 PM",
+        "venue": "HRT LAB",
+        "isPractical": true,
         "isVirtual": false
       }
     ]
@@ -41889,8 +42034,8 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
-    "code": "HTM",
-    "level": "Unspecified",
+    "code": "HTM 201(P)",
+    "level": "200",
     "prefix": "HTM",
     "isPractical": true,
     "isVirtual": false,
@@ -41899,7 +42044,7 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Monday",
         "startTime": "02:00 PM",
         "endTime": "04:00 PM",
-        "venue": "201(P) HTM LAB",
+        "venue": "HTM LAB",
         "isPractical": true,
         "isVirtual": false
       }
@@ -42635,8 +42780,8 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
-    "code": "PBS",
-    "level": "Unspecified",
+    "code": "PBS 501(P)",
+    "level": "500",
     "prefix": "PBS",
     "isPractical": true,
     "isVirtual": false,
@@ -42645,7 +42790,7 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Monday",
         "startTime": "02:00 PM",
         "endTime": "04:00 PM",
-        "venue": "501(P) PBST LAB",
+        "venue": "PBST LAB",
         "isPractical": true,
         "isVirtual": false
       }
@@ -43933,8 +44078,8 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
-    "code": "CPT",
-    "level": "Unspecified",
+    "code": "CPT 503(P)",
+    "level": "500",
     "prefix": "CPT",
     "isPractical": true,
     "isVirtual": false,
@@ -43943,7 +44088,7 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Friday",
         "startTime": "04:30 PM",
         "endTime": "06:30 PM",
-        "venue": "503(P) CPT LAB",
+        "venue": "CPT LAB",
         "isPractical": true,
         "isVirtual": false
       }
@@ -45556,6 +45701,23 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
+    "code": "MCB 305",
+    "level": "300",
+    "prefix": "MCB",
+    "isPractical": false,
+    "isVirtual": false,
+    "sessions": [
+      {
+        "day": "Monday",
+        "startTime": "04:00 PM",
+        "endTime": "06:00 PM",
+        "venue": "A 101",
+        "isPractical": false,
+        "isVirtual": false
+      }
+    ]
+  },
+  {
     "code": "NTD 417",
     "level": "400",
     "prefix": "NTD",
@@ -45981,8 +46143,8 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
-    "code": "SOS",
-    "level": "Unspecified",
+    "code": "SOS 101/211",
+    "level": "100",
     "prefix": "SOS",
     "isPractical": false,
     "isVirtual": true,
@@ -45991,7 +46153,7 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Friday",
         "startTime": "04:30 PM",
         "endTime": "06:30 PM",
-        "venue": "101/211 VET AUD/ACAD C1-C3/VIRTUAL",
+        "venue": "VET AUD/ACAD C1-C3/VIRTUAL",
         "isPractical": false,
         "isVirtual": true
       }
@@ -46083,8 +46245,8 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
     ]
   },
   {
-    "code": "PHY",
-    "level": "Unspecified",
+    "code": "PHY 103/PHY",
+    "level": "100",
     "prefix": "PHY",
     "isPractical": false,
     "isVirtual": true,
@@ -46093,7 +46255,7 @@ export const COURSE_CATALOG: CourseCatalogItem[] = [
         "day": "Tuesday",
         "startTime": "04:00 PM",
         "endTime": "06:00 PM",
-        "venue": "103/PHY 105 (C) PPCP LR/VIRTUAL",
+        "venue": "105 (C) PPCP LR/VIRTUAL",
         "isPractical": false,
         "isVirtual": true
       }

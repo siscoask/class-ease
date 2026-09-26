@@ -145,7 +145,19 @@ export interface NextClassState {
   timeRemainingMinutes?: number;
   nextAcademicDay?: TimetableDay;
   firstSessionNextDay?: TimetableSession;
+  todayRemainingCount?: number;
+  dayOffset?: number;
 }
+
+const ALL_CALENDAR_DAYS: DayOfWeek[] = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
 
 export function calculateNextClassState(
   allSessions: TimetableSession[]
@@ -157,7 +169,7 @@ export function calculateNextClassState(
   const isAcademicDay = ACADEMIC_DAYS.includes(dayName as TimetableDay);
   const todayAcademicDay = isAcademicDay ? (dayName as TimetableDay) : null;
 
-  // Filter today's sessions sorted by start time
+  // Filter today's sessions sorted strictly by start time
   const todaySessions = todayAcademicDay
     ? allSessions
         .filter((s) => s.day === todayAcademicDay)
@@ -165,70 +177,84 @@ export function calculateNextClassState(
     : [];
 
   if (!todayAcademicDay || todaySessions.length === 0) {
-    // Find next academic day with classes
+    // Find next academic day with classes using true calendar sequence
     const nextDayInfo = findNextDayWithClasses(allSessions, dayName);
     return {
       status: 'no_classes_today',
       nextAcademicDay: nextDayInfo.day,
       firstSessionNextDay: nextDayInfo.firstSession,
+      dayOffset: nextDayInfo.dayOffset,
     };
   }
 
-  // Check if currently inside a class
-  for (const session of todaySessions) {
+  // 1. Check if currently inside a class right now
+  for (let i = 0; i < todaySessions.length; i++) {
+    const session = todaySessions[i];
     const start = parseTimeToMinutes(session.startTime);
     const end = parseTimeToMinutes(session.endTime);
     if (currentMinutes >= start && currentMinutes < end) {
+      const remainingMinutes = Math.max(1, end - currentMinutes);
+      const remainingToday = todaySessions.slice(i + 1);
+      const nextSessionToday = remainingToday.length > 0 ? remainingToday[0] : undefined;
+      const nextDayInfo = !nextSessionToday ? findNextDayWithClasses(allSessions, dayName) : {};
+
       return {
         status: 'now',
         currentSession: session,
-        timeRemainingMinutes: end - currentMinutes,
+        timeRemainingMinutes: remainingMinutes,
+        nextSession: nextSessionToday,
+        nextAcademicDay: nextDayInfo.day,
+        firstSessionNextDay: nextDayInfo.firstSession,
+        todayRemainingCount: remainingToday.length,
       };
     }
   }
 
-  // Check for upcoming class today
+  // 2. Check for upcoming class later today
   const upcomingToday = todaySessions.filter(
     (s) => parseTimeToMinutes(s.startTime) > currentMinutes
   );
 
   if (upcomingToday.length > 0) {
     const next = upcomingToday[0];
-    const startsIn = parseTimeToMinutes(next.startTime) - currentMinutes;
+    const startsIn = Math.max(1, parseTimeToMinutes(next.startTime) - currentMinutes);
     return {
       status: 'upcoming',
       nextSession: next,
       timeRemainingMinutes: startsIn,
+      todayRemainingCount: upcomingToday.length,
     };
   }
 
-  // If reached here: all classes for today are finished
+  // 3. If reached here: all scheduled classes for today have concluded
   const nextDayInfo = findNextDayWithClasses(allSessions, dayName);
   return {
     status: 'done_for_today',
     nextAcademicDay: nextDayInfo.day,
     firstSessionNextDay: nextDayInfo.firstSession,
+    dayOffset: nextDayInfo.dayOffset,
   };
 }
 
 function findNextDayWithClasses(
   allSessions: TimetableSession[],
   currentDay: DayOfWeek
-): { day?: TimetableDay; firstSession?: TimetableSession } {
-  const dayOrder: TimetableDay[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-  const currentIndex = dayOrder.indexOf(currentDay as TimetableDay);
+): { day?: TimetableDay; firstSession?: TimetableSession; dayOffset?: number } {
+  const currentIdx = ALL_CALENDAR_DAYS.indexOf(currentDay);
+  if (currentIdx === -1) return {};
 
   for (let offset = 1; offset <= 7; offset++) {
-    const targetIndex = (currentIndex + offset + 7) % 7;
-    if (targetIndex < 5) {
-      const candidateDay = dayOrder[targetIndex];
+    const candidateDayName = ALL_CALENDAR_DAYS[(currentIdx + offset) % 7];
+    if (ACADEMIC_DAYS.includes(candidateDayName as TimetableDay)) {
+      const candidateAcademicDay = candidateDayName as TimetableDay;
       const dayClasses = allSessions
-        .filter((s) => s.day === candidateDay)
+        .filter((s) => s.day === candidateAcademicDay)
         .sort((a, b) => parseTimeToMinutes(a.startTime) - parseTimeToMinutes(b.startTime));
       if (dayClasses.length > 0) {
         return {
-          day: candidateDay,
+          day: candidateAcademicDay,
           firstSession: dayClasses[0],
+          dayOffset: offset,
         };
       }
     }
@@ -448,8 +474,9 @@ export function buildDayTimeline(
 export function getRootCourseCode(code: string): string {
   if (!code) return '';
   return code
-    .replace(/\s*\([A-Za-z0-9,\s]+\)$/, '')
-    .replace(/\s*\[[A-Za-z0-9,\s]+\]$/, '')
+    .replace(/\s*\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}\s*(?:AM|PM)?/gi, '')
+    .replace(/\s*\([A-Za-z0-9,\s\.\-]+\)$/, '')
+    .replace(/\s*\[[A-Za-z0-9,\s\.\-]+\]$/, '')
     .trim();
 }
 
@@ -615,7 +642,100 @@ export function getDepartmentSuggestedCourses(
     }
   }
 
-  // 5. Management Sciences (COLENDS: ACC, BAM, BFN, ECO, ETS)
+  // 5. Biosciences (COLBIOS: MCB, BCH, BOT, ZOO)
+  const isBiosciences = ['MCB', 'BCH', 'BOT', 'ZOO'].includes(codeClean);
+  if (isBiosciences) {
+    if (lvl === '100') {
+      const bio100 = ['BIO 101', 'BIO 103', 'CHM 101', 'MTS 105', 'PHS 101', 'GNS 111', 'GST 111'];
+      for (const s of allSessions) {
+        if (bio100.some((c) => s.courseCode.toUpperCase().includes(c))) {
+          matches.add(getRootCourseCode(s.courseCode));
+        }
+      }
+    } else if (lvl === '200') {
+      const bio200 = ['BIO 201', 'CHM 211', 'GNS 201'];
+      for (const s of allSessions) {
+        if (bio200.some((c) => s.courseCode.toUpperCase().includes(c))) {
+          matches.add(getRootCourseCode(s.courseCode));
+        }
+      }
+    }
+  }
+
+  // 6. Animal Science (COLANIM: APH, ABG, ANN, ANP, PRM)
+  const isAnimalScience = ['APH', 'ABG', 'ANN', 'ANP', 'PRM'].includes(codeClean);
+  if (isAnimalScience) {
+    if (lvl === '100') {
+      const anim100 = ['ANS 101', 'ANS 103', 'BIO 101', 'CHM 101', 'MTS 105', 'PHS 101', 'GNS 111', 'GST 111'];
+      for (const s of allSessions) {
+        if (anim100.some((c) => s.courseCode.toUpperCase().includes(c))) {
+          matches.add(getRootCourseCode(s.courseCode));
+        }
+      }
+    } else if (lvl === '200') {
+      const anim200 = ['AGR 201', 'AGR 203', 'ANS 201', 'GNS 201'];
+      for (const s of allSessions) {
+        if (anim200.some((c) => s.courseCode.toUpperCase().includes(c))) {
+          matches.add(getRootCourseCode(s.courseCode));
+        }
+      }
+    }
+  }
+
+  // 7. Plant Science (COLPLANT: CPT, CRD, HRT, PBST, PCP, SOS)
+  const isPlantScience = ['CPT', 'CRD', 'HRT', 'PBST', 'PCP', 'SOS'].includes(codeClean);
+  if (isPlantScience) {
+    if (lvl === '100') {
+      const plant100 = ['PCP 101', 'BIO 101', 'CHM 101', 'MTS 105', 'PHS 101', 'GNS 111', 'GST 111'];
+      for (const s of allSessions) {
+        if (plant100.some((c) => s.courseCode.toUpperCase().includes(c))) {
+          matches.add(getRootCourseCode(s.courseCode));
+        }
+      }
+    } else if (lvl === '200') {
+      const plant200 = ['AGR 201', 'AGR 203', 'PCP 201', 'SOS 211', 'GNS 201'];
+      for (const s of allSessions) {
+        if (plant200.some((c) => s.courseCode.toUpperCase().includes(c))) {
+          matches.add(getRootCourseCode(s.courseCode));
+        }
+      }
+    }
+  }
+
+  // 8. Environmental Resources (COLERM: FIS, AQFM, FWM, EMT, WMA, WSH)
+  const isErm = ['FIS', 'AQFM', 'FWM', 'EMT', 'WMA', 'WSH'].includes(codeClean);
+  if (isErm && lvl === '100') {
+    const erm100 = ['BIO 101', 'CHM 101', 'MTS 101', 'MTS 105', 'PHS 101', 'GNS 111', 'GST 111'];
+    for (const s of allSessions) {
+      if (erm100.some((c) => s.courseCode.toUpperCase().includes(c))) {
+        matches.add(getRootCourseCode(s.courseCode));
+      }
+    }
+  }
+
+  // 9. Food Science & Human Ecology (COLFHEC: FST, HSM, HTM, NTD)
+  const isFhec = ['FST', 'HSM', 'HTM', 'NTD'].includes(codeClean);
+  if (isFhec && lvl === '100') {
+    const fhec100 = ['BIO 101', 'CHM 101', 'MTS 105', 'PHS 101', 'GNS 111', 'GST 111'];
+    for (const s of allSessions) {
+      if (fhec100.some((c) => s.courseCode.toUpperCase().includes(c))) {
+        matches.add(getRootCourseCode(s.courseCode));
+      }
+    }
+  }
+
+  // 10. Veterinary Medicine (COLVET: VMD, VBA, VBB, VBP, VPM, VPT, VCS, VCC)
+  const isVet = ['VMD', 'VBA', 'VBB', 'VBP', 'VPM', 'VPT', 'VCS', 'VCC'].includes(codeClean);
+  if (isVet && lvl === '100') {
+    const vet100 = ['VMD 101', 'BIO 101', 'CHM 101', 'PHS 101', 'MTS 101', 'GNS 111', 'GST 111'];
+    for (const s of allSessions) {
+      if (vet100.some((c) => s.courseCode.toUpperCase().includes(c))) {
+        matches.add(getRootCourseCode(s.courseCode));
+      }
+    }
+  }
+
+  // 11. Management Sciences (COLENDS: ACC, BAM, BFN, ECO, ETS)
   const isManagement = ['ACC', 'BAM', 'BFN', 'ECO', 'ETS'].includes(codeClean);
   if (isManagement && lvl === '100') {
     const mgmt100 = ['ACC 101', 'BAM 101', 'BFN 101', 'ECO 101', 'ETS 101', 'MTS 105', 'GNS 111', 'GST 111'];
@@ -626,7 +746,7 @@ export function getDepartmentSuggestedCourses(
     }
   }
 
-  // 6. Generic university 100L fallback if still empty
+  // 12. Generic university 100L fallback if still empty
   if (lvl === '100' && matches.size === 0) {
     const general100 = ['MTS 101', 'MTS 105', 'CHM 101', 'BIO 101', 'PHS 101', 'GNS 111', 'GST 111'];
     for (const s of allSessions) {

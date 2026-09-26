@@ -234,6 +234,10 @@ export default function App() {
           onSelectTab={handleSelectTab}
           darkMode={profile.darkMode}
           onToggleDarkMode={toggleDarkMode}
+          onOpenFeedback={() => {
+            setFeedbackContext({ departmentId: profile.departmentId || profile.collegeId });
+            setShowFeedbackModal(true);
+          }}
         />
 
         {/* Main Container */}
@@ -393,7 +397,7 @@ export default function App() {
       {/* Feedback / Discrepancy Report Modal */}
       {showFeedbackModal && (
         <FeedbackModal
-          initialContext={feedbackContext}
+          initialContext={feedbackContext || { departmentId: profile.departmentId || profile.collegeId }}
           onClose={() => setShowFeedbackModal(false)}
         />
       )}

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { TimetableSession, TimetableDay } from '../types';
-import { calculateNextClassState, formatRelativeMinutes } from '../utils/scheduleLogic';
+import { calculateNextClassState, formatRelativeMinutes, getRootCourseCode } from '../utils/scheduleLogic';
 import { OFFICIAL_METADATA, VERIFIED_COURSE_TITLES } from '../data/timetable';
-import { MapPin, Navigation, Clock, CheckCircle2, Calendar, Radio } from 'lucide-react';
+import { MapPin, Navigation, Clock, CheckCircle2, Calendar, Radio, ArrowRight } from 'lucide-react';
 
 interface NextClassCardProps {
   sessions: TimetableSession[];
@@ -29,16 +29,43 @@ export const NextClassCard: React.FC<NextClassCardProps> = ({
 
   const state = calculateNextClassState(sessions);
 
+  // Helper to reliably resolve course titles even with streams (A, B), practicals, or slashes
+  const getCourseTitle = (courseCode: string) => {
+    if (!courseCode) return undefined;
+    const clean = courseCode.toUpperCase().trim();
+    if (VERIFIED_COURSE_TITLES[clean]) return VERIFIED_COURSE_TITLES[clean];
+
+    const root = getRootCourseCode(clean).toUpperCase().trim();
+    if (VERIFIED_COURSE_TITLES[root]) return VERIFIED_COURSE_TITLES[root];
+
+    if (clean.includes('/')) {
+      const parts = clean.split('/').map((p) => {
+        const pRoot = getRootCourseCode(p.trim()).toUpperCase().trim();
+        return VERIFIED_COURSE_TITLES[pRoot] || VERIFIED_COURSE_TITLES[p.trim()];
+      }).filter(Boolean);
+      if (parts.length > 0) return parts.join(' / ');
+    }
+    return undefined;
+  };
+
   // External Direction link handler
   const handleDirections = (venue: string) => {
     const url = `${OFFICIAL_METADATA.directionServiceUrl}`;
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
+  // Helper for human-friendly day label
+  const formatDayRelation = (dayName?: TimetableDay, offset?: number) => {
+    if (!dayName) return 'next academic day';
+    if (offset === 1) return `Tomorrow (${dayName})`;
+    if (offset === 2) return `In 2 days (${dayName})`;
+    return dayName;
+  };
+
   // State 1: Active class right now
   if (state.status === 'now' && state.currentSession) {
     const session = state.currentSession;
-    const title = VERIFIED_COURSE_TITLES[session.courseCode.toUpperCase()];
+    const title = getCourseTitle(session.courseCode);
     return (
       <div className="relative overflow-hidden rounded-2xl bg-indigo-900 text-white p-5 md:p-6 shadow-md border border-indigo-800">
         <div className="absolute top-0 right-0 translate-x-8 -translate-y-8 w-44 h-44 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
@@ -84,6 +111,12 @@ export const NextClassCard: React.FC<NextClassCardProps> = ({
                 <MapPin className="w-3.5 h-3.5 text-indigo-300" />
                 <span>{session.venue}</span>
               </button>
+              {session.isPractical && (
+                <span className="text-emerald-300 font-medium">· Practical</span>
+              )}
+              {session.isVirtual && (
+                <span className="text-indigo-200 font-medium">· Virtual Component</span>
+              )}
             </div>
           </div>
 
@@ -98,6 +131,31 @@ export const NextClassCard: React.FC<NextClassCardProps> = ({
             </button>
           </div>
         </div>
+
+        {/* Subsequent class preview (Later today or tomorrow) */}
+        {state.nextSession && (
+          <div className="mt-3.5 pt-3 border-t border-indigo-800/80 flex items-center justify-between text-xs text-indigo-200 flex-wrap gap-2">
+            <span className="font-semibold text-white flex items-center gap-1">
+              <span>Next later today:</span>
+              <button
+                onClick={() => onSelectCourse?.(state.nextSession!.courseCode)}
+                className="text-emerald-300 font-bold hover:underline"
+              >
+                {state.nextSession.courseCode}
+              </button>
+            </span>
+            <div className="flex items-center gap-2 text-[11px] font-mono">
+              <span>{state.nextSession.startTime}</span>
+              <span>@</span>
+              <button
+                onClick={() => onSelectVenue?.(state.nextSession!.venue)}
+                className="hover:underline font-sans text-indigo-100"
+              >
+                {state.nextSession.venue}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -105,15 +163,20 @@ export const NextClassCard: React.FC<NextClassCardProps> = ({
   // State 2: Next Upcoming Class Today
   if (state.status === 'upcoming' && state.nextSession) {
     const session = state.nextSession;
-    const title = VERIFIED_COURSE_TITLES[session.courseCode.toUpperCase()];
+    const title = getCourseTitle(session.courseCode);
     return (
       <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white p-5 md:p-6 shadow-sm border border-slate-200 dark:border-slate-800">
         <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
             <Radio className="w-3.5 h-3.5" />
             <span className="text-xs font-bold uppercase tracking-wider">
-              Next Class
+              Next Class Today
             </span>
+            {state.todayRemainingCount && state.todayRemainingCount > 1 && (
+              <span className="text-[10px] text-slate-400 font-normal">
+                ({state.todayRemainingCount} remaining today)
+              </span>
+            )}
           </div>
 
           <div className="text-xs font-semibold font-mono text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded-md tabular-nums">
@@ -184,7 +247,7 @@ export const NextClassCard: React.FC<NextClassCardProps> = ({
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               {state.nextAcademicDay && state.firstSessionNextDay ? (
                 <>
-                  Next class is on <strong className="text-slate-700 dark:text-slate-200">{state.nextAcademicDay}</strong>: {state.firstSessionNextDay.courseCode} at {state.firstSessionNextDay.startTime} ({state.firstSessionNextDay.venue}).
+                  Next class is {formatDayRelation(state.nextAcademicDay, state.dayOffset)}: <strong className="text-slate-700 dark:text-slate-200">{state.firstSessionNextDay.courseCode}</strong> at {state.firstSessionNextDay.startTime} ({state.firstSessionNextDay.venue}).
                 </>
               ) : (
                 'All scheduled lectures and practicals for today have concluded.'
@@ -225,7 +288,7 @@ export const NextClassCard: React.FC<NextClassCardProps> = ({
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             {state.nextAcademicDay && state.firstSessionNextDay ? (
               <>
-                Upcoming academic day: <strong className="text-slate-700 dark:text-slate-200">{state.nextAcademicDay}</strong> starting with {state.firstSessionNextDay.courseCode} at {state.firstSessionNextDay.startTime}.
+                Upcoming academic day: <strong className="text-slate-700 dark:text-slate-200">{formatDayRelation(state.nextAcademicDay, state.dayOffset)}</strong> starting with {state.firstSessionNextDay.courseCode} at {state.firstSessionNextDay.startTime} ({state.firstSessionNextDay.venue}).
               </>
             ) : (
               'You have no official lecture or practical timetable items today.'

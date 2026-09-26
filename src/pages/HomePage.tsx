@@ -122,6 +122,26 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </div>
 
+      {/* Unconfigured Department Prompt */}
+      {!userProfile.departmentId && (
+        <div className="p-4 rounded-2xl border border-indigo-200 dark:border-indigo-900/60 bg-gradient-to-r from-indigo-50/90 to-blue-50/70 dark:from-indigo-950/40 dark:to-slate-900/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5 text-xs shadow-2xs">
+          <div className="space-y-1">
+            <div className="font-bold text-indigo-950 dark:text-indigo-200 text-sm">
+              Personalize Your College & Department Schedule
+            </div>
+            <p className="text-[11px] text-indigo-800/80 dark:text-indigo-300/80 leading-relaxed">
+              Currently showing standard {userProfile.level}L schedule. Choose your College (Engineering, Computing, Science, Agriculture, Management, etc.) to view your exact lectures and venues.
+            </p>
+          </div>
+          <button
+            onClick={() => onNavigateTab('settings')}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition-colors shrink-0 shadow-xs whitespace-nowrap"
+          >
+            <span>Select My Department →</span>
+          </button>
+        </div>
+      )}
+
       {/* Curriculum Auto-Enroll Notice for under-enrolled students */}
       {activeSessions.length <= 2 && userProfile.departmentId && onSyncDepartmentCurriculum && (
         <div className="p-4 rounded-2xl border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/70 dark:bg-indigo-950/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5 text-xs shadow-2xs">

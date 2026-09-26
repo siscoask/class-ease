@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { UserProfile, TimetableViewMode } from '../types';
-import { VERIFIED_COLLEGES, OFFICIAL_METADATA } from '../data/timetable';
+import { VERIFIED_COLLEGES, OFFICIAL_METADATA, TIMETABLE_SESSIONS } from '../data/timetable';
+import { getDepartmentSuggestedCourses } from '../utils/scheduleLogic';
 import { PWAInstallButton } from '../components/PWAInstallButton';
 import {
   ShieldAlert,
@@ -46,12 +47,19 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
   const departments = selectedCollege?.departments || [];
 
   const handleSave = () => {
+    const newDept = departmentId || (departments[0]?.code ?? '');
+    const deptChanged = newDept !== userProfile.departmentId || level !== userProfile.level;
+    const newCourses = deptChanged
+      ? getDepartmentSuggestedCourses(newDept, level, TIMETABLE_SESSIONS)
+      : userProfile.selectedCourseCodes;
+
     onUpdateProfile({
       ...userProfile,
       preferredName: name.trim(),
       collegeId: selectedCollege?.id || '',
-      departmentId: departmentId || (departments[0]?.code ?? ''),
+      departmentId: newDept,
       level,
+      selectedCourseCodes: newCourses,
       preferredView: view,
     });
     setSavedSuccess(true);
