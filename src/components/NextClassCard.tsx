@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { TimetableSession, TimetableDay } from '../types';
 import { calculateNextClassState, formatRelativeMinutes, getRootCourseCode } from '../utils/scheduleLogic';
-import { OFFICIAL_METADATA, VERIFIED_COURSE_TITLES } from '../data/timetable';
+import { OFFICIAL_METADATA } from '../data/timetable';
+import { getCourseMeaning } from '../utils/courseMeanings';
 import { MapPin, Navigation, Clock, CheckCircle2, Calendar, Radio, ArrowRight } from 'lucide-react';
 
 interface NextClassCardProps {
@@ -31,21 +32,7 @@ export const NextClassCard: React.FC<NextClassCardProps> = ({
 
   // Helper to reliably resolve course titles even with streams (A, B), practicals, or slashes
   const getCourseTitle = (courseCode: string) => {
-    if (!courseCode) return undefined;
-    const clean = courseCode.toUpperCase().trim();
-    if (VERIFIED_COURSE_TITLES[clean]) return VERIFIED_COURSE_TITLES[clean];
-
-    const root = getRootCourseCode(clean).toUpperCase().trim();
-    if (VERIFIED_COURSE_TITLES[root]) return VERIFIED_COURSE_TITLES[root];
-
-    if (clean.includes('/')) {
-      const parts = clean.split('/').map((p) => {
-        const pRoot = getRootCourseCode(p.trim()).toUpperCase().trim();
-        return VERIFIED_COURSE_TITLES[pRoot] || VERIFIED_COURSE_TITLES[p.trim()];
-      }).filter(Boolean);
-      if (parts.length > 0) return parts.join(' / ');
-    }
-    return undefined;
+    return getCourseMeaning(courseCode);
   };
 
   // External Direction link handler

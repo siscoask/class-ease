@@ -1,6 +1,7 @@
 import React from 'react';
-import { TIMETABLE_SESSIONS, OFFICIAL_METADATA, VERIFIED_COURSE_TITLES } from '../data/timetable';
+import { TIMETABLE_SESSIONS, OFFICIAL_METADATA } from '../data/timetable';
 import { isSessionMatchingCourse, getRootCourseCode } from '../utils/scheduleLogic';
+import { getCourseMeaning } from '../utils/courseMeanings';
 import { X, Plus, Check, Clock, MapPin, Navigation, ShieldCheck } from 'lucide-react';
 
 interface CourseModalProps {
@@ -26,10 +27,7 @@ export const CourseModal: React.FC<CourseModalProps> = ({
   const sample = sessions[0];
   const isPractical = sessions.some((s) => s.isPractical);
   const isVirtual = sessions.some((s) => s.isVirtual);
-  const root = getRootCourseCode(courseCode);
-  const courseTitle =
-    VERIFIED_COURSE_TITLES[courseCode.toUpperCase().trim()] ||
-    VERIFIED_COURSE_TITLES[root.toUpperCase().trim()];
+  const courseTitle = getCourseMeaning(courseCode);
 
   const handleDirections = (venue: string) => {
     window.open(OFFICIAL_METADATA.directionServiceUrl, '_blank', 'noopener,noreferrer');

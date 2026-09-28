@@ -1,6 +1,7 @@
 import React from 'react';
 import { TimetableSession, PersonalEvent, TimetableDay } from '../types';
 import { ACADEMIC_DAYS, parseTimeToMinutes, getCampusNow } from '../utils/scheduleLogic';
+import { getCourseMeaning } from '../utils/courseMeanings';
 import { Clock, MapPin, Trophy } from 'lucide-react';
 
 interface TimetableWeeklyProps {
@@ -94,6 +95,13 @@ export const TimetableWeekly: React.FC<TimetableWeeklyProps> = ({
                             </span>
                           )}
                         </div>
+
+                        <p
+                          className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5 leading-tight"
+                          title={getCourseMeaning(s.courseCode)}
+                        >
+                          {getCourseMeaning(s.courseCode)}
+                        </p>
 
                         <div className="mt-1 flex items-center gap-1 text-[11px] font-mono text-slate-500 dark:text-slate-400">
                           <Clock className="w-3 h-3 text-slate-400 shrink-0" />

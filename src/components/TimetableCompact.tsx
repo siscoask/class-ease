@@ -1,6 +1,7 @@
 import React from 'react';
 import { TimetableSession } from '../types';
 import { parseTimeToMinutes } from '../utils/scheduleLogic';
+import { getCourseMeaning } from '../utils/courseMeanings';
 
 interface TimetableCompactProps {
   sessions: TimetableSession[];
@@ -49,10 +50,13 @@ export const TimetableCompact: React.FC<TimetableCompactProps> = ({
                 <td className="py-2 px-3">
                   <button
                     onClick={() => onSelectCourse?.(s.courseCode)}
-                    className="font-bold text-indigo-700 dark:text-indigo-400 hover:underline text-left"
+                    className="font-bold text-indigo-700 dark:text-indigo-400 hover:underline text-left block"
                   >
                     {s.courseCode}
                   </button>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 block line-clamp-1 max-w-[200px]" title={getCourseMeaning(s.courseCode)}>
+                    {getCourseMeaning(s.courseCode)}
+                  </span>
                 </td>
                 <td className="py-2 px-3 text-slate-600 dark:text-slate-400">
                   {s.isPractical ? (

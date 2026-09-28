@@ -1,7 +1,8 @@
 import React from 'react';
 import { TimetableSession, UserProfile } from '../types';
 import { ACADEMIC_DAYS, parseTimeToMinutes, getCampusNow } from '../utils/scheduleLogic';
-import { OFFICIAL_METADATA, VERIFIED_COURSE_TITLES, OFFICIAL_VENUES } from '../data/timetable';
+import { OFFICIAL_METADATA, OFFICIAL_VENUES } from '../data/timetable';
+import { getCourseMeaning } from '../utils/courseMeanings';
 
 interface PrintableTimetableProps {
   sessions: TimetableSession[];
@@ -126,7 +127,7 @@ export const PrintableTimetable: React.FC<PrintableTimetableProps> = ({ sessions
               }
 
               return daySessions.map((s, idx) => {
-                const title = VERIFIED_COURSE_TITLES[s.courseCode.toUpperCase().trim()] || 'Official Lecture Course';
+                const title = getCourseMeaning(s.courseCode);
                 return (
                   <tr
                     key={s.id}

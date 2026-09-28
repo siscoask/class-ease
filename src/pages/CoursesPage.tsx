@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { COURSE_CATALOG, VERIFIED_COURSE_TITLES } from '../data/timetable';
+import { COURSE_CATALOG } from '../data/timetable';
 import { matchCourseSearch, isSessionMatchingCourse } from '../utils/scheduleLogic';
+import { getCourseMeaning } from '../utils/courseMeanings';
 import { Search, Plus, Check, BookOpen, Layers } from 'lucide-react';
 
 interface CoursesPageProps {
@@ -24,7 +25,7 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
 
   // Filter courses
   const filteredCourses = COURSE_CATALOG.filter((c) => {
-    const courseTitle = VERIFIED_COURSE_TITLES[c.code.toUpperCase().trim()];
+    const courseTitle = getCourseMeaning(c.code);
     // Search by code and verified title
     if (searchQuery.trim() && !matchCourseSearch(c.code, searchQuery, courseTitle)) {
       return false;
@@ -214,11 +215,9 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({
                     {course.code}
                   </button>
 
-                  {VERIFIED_COURSE_TITLES[course.code.toUpperCase().trim()] && (
-                    <p className="text-xs text-slate-600 dark:text-slate-300 font-medium truncate mt-0.5">
-                      {VERIFIED_COURSE_TITLES[course.code.toUpperCase().trim()]}
-                    </p>
-                  )}
+                  <p className="text-xs text-slate-600 dark:text-slate-300 font-medium line-clamp-1 mt-0.5" title={getCourseMeaning(course.code)}>
+                    {getCourseMeaning(course.code)}
+                  </p>
 
                   <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
                     <Layers className="w-3.5 h-3.5 text-slate-400" />

@@ -3,6 +3,7 @@ import { TimelineItem, TimetableDay, PersonalEvent, TimetableSession } from '../
 import { buildDayTimeline } from '../utils/scheduleLogic';
 import { MapPin, Clock, AlertTriangle, Coffee, Plus, Navigation } from 'lucide-react';
 import { OFFICIAL_METADATA } from '../data/timetable';
+import { getCourseMeaning } from '../utils/courseMeanings';
 
 interface TodayTimelineProps {
   sessions: TimetableSession[];
@@ -74,27 +75,32 @@ export const TodayTimeline: React.FC<TodayTimelineProps> = ({
                     : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800'
                 } shadow-xs hover:shadow-sm`}
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => onSelectCourse?.(s.courseCode)}
-                      className="text-base font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-                    >
-                      {s.courseCode}
-                    </button>
-                    {s.isPractical && (
-                      <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
-                        · Practical
-                      </span>
-                    )}
-                    {s.isVirtual && (
-                      <span className="text-[11px] font-medium text-indigo-700 dark:text-indigo-400">
-                        · Virtual
-                      </span>
-                    )}
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => onSelectCourse?.(s.courseCode)}
+                        className="text-base font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                      >
+                        {s.courseCode}
+                      </button>
+                      {s.isPractical && (
+                        <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
+                          · Practical
+                        </span>
+                      )}
+                      {s.isVirtual && (
+                        <span className="text-[11px] font-medium text-indigo-700 dark:text-indigo-400">
+                          · Virtual
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-300 font-medium line-clamp-1 mt-0.5">
+                      {getCourseMeaning(s.courseCode)}
+                    </p>
                   </div>
 
-                  <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-mono">
+                  <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-mono shrink-0">
                     <Clock className="w-3.5 h-3.5 text-slate-400" />
                     <span>{s.startTime} – {s.endTime}</span>
                   </div>
