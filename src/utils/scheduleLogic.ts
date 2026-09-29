@@ -822,7 +822,7 @@ export function exportToICalendar(
     lines.push(`RRULE:FREQ=WEEKLY;BYDAY=${dayCodes[s.day]};UNTIL=20270131T235959Z`);
     lines.push(`SUMMARY:${s.courseCode}${s.isPractical ? ' (Practical)' : ''}`);
     lines.push(`LOCATION:${s.venue}`);
-    lines.push(`DESCRIPTION:Official FUNAAB Lecture Timetable v2.0\\nVenue: ${s.venue}\\nType: ${s.isPractical ? 'Practical' : 'Lecture'}\\nDirections: https://funaab.getdirection.xyz`);
+    lines.push(`DESCRIPTION:Official FUNAAB Lecture Timetable v4.0\\nVenue: ${s.venue}\\nType: ${s.isPractical ? 'Practical' : 'Lecture'}\\nDirections: https://funaab.getdirection.xyz`);
     lines.push('STATUS:CONFIRMED');
     lines.push('END:VEVENT');
   }

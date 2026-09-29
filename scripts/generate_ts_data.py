@@ -310,8 +310,8 @@ sessions.append({
     "isVirtual": False,
     "academicYear": "2026/2027",
     "semester": "First Semester",
-    "timetableVersion": "2.0",
-    "source": "Official TIMTEC v2.0 Page 2-3",
+    "timetableVersion": "4.0",
+    "source": "Official TIMTEC v4.0 Page 2-3",
     "verificationStatus": "Official Master Timetable"
 })
 sessions.append({
@@ -327,14 +327,14 @@ sessions.append({
     "isVirtual": False,
     "academicYear": "2026/2027",
     "semester": "First Semester",
-    "timetableVersion": "2.0",
-    "source": "Official TIMTEC v2.0 Page 2-3",
+    "timetableVersion": "4.0",
+    "source": "Official TIMTEC v4.0 Page 2-3",
     "verificationStatus": "Official Master Timetable"
 })
 
 ts_content = f"""/**
  * Class Ease - Official FUNAAB Timetable Dataset
- * Source: 2026/2027 First Semester Lecture Time-Table — Version 2.0
+ * Source: 2026/2027 First Semester Lecture Time-Table — Version 4.0
  * Authority: Time Table and Examination Committee (TIMTEC), Federal University of Agriculture, Abeokuta
  * 
  * Strict Source-of-Truth compliance:
@@ -401,7 +401,7 @@ export const OFFICIAL_METADATA = {{
   institution: 'Federal University of Agriculture, Abeokuta (FUNAAB)',
   academicYear: '2026/2027',
   semester: 'First Semester',
-  timetableVersion: '2.0',
+  timetableVersion: '4.0',
   committee: 'Time Table and Examination Committee (TIMTEC)',
   directionServiceUrl: 'https://funaab.getdirection.xyz',
   campusGuideUrl: 'https://funaab101.xyz',

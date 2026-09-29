@@ -36,7 +36,7 @@ export const VenuesPage: React.FC<VenuesPageProps> = ({ onSelectVenue }) => {
           Campus Venues Directory
         </h1>
         <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-          Official lecture theatres, laboratories, and auditoria verified by TIMTEC v2.0.
+          Official lecture theatres, laboratories, and auditoria verified by TIMTEC v4.0.
         </p>
       </div>
 
